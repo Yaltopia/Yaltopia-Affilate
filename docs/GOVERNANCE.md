@@ -1,6 +1,6 @@
 # Governance
 
-Yaltopia Tech maintains this repository. Prime Store originated the product idea and is credited in the README.
+Yaltopia Tech maintains this repository.
 
 - `main` is the protected line for public releases.
 - Product rules for Admin, Payout Agent, Money, and creator approval are not changed in drive-by pull requests. Open a **spec change** issue first.

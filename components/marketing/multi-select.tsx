@@ -79,7 +79,7 @@ export function MultiSelect<T extends string>({
               key={option.value}
               type="button"
               onClick={() => onToggle(option.value)}
-              className="rounded-full bg-secondary px-2 py-0.5 text-[11px] text-foreground"
+              className="rounded-md bg-secondary px-2 py-0.5 text-[11px] text-foreground"
             >
               {option.label}
             </button>

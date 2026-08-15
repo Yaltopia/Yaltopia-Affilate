@@ -19,7 +19,7 @@ export function BrowseModeSwitch({
     <div
       role="tablist"
       aria-label={t(locale, "browseMode")}
-      className="inline-flex rounded-full bg-secondary p-1 ring-1 ring-foreground/8"
+      className="inline-flex rounded-md bg-secondary p-1 ring-1 ring-foreground/8"
     >
       {(["creators", "orders"] as const).map((value) => (
         <button
@@ -29,7 +29,7 @@ export function BrowseModeSwitch({
           aria-selected={mode === value}
           onClick={() => onMode(value)}
           className={cn(
-            "h-9 rounded-full px-4 text-sm font-medium transition-colors",
+            "h-9 rounded-md px-4 text-sm font-medium transition-colors",
             mode === value
               ? "bg-foreground text-background"
               : "text-muted-foreground hover:text-foreground",

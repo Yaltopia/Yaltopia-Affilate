@@ -21,13 +21,28 @@ export type Session = {
   roles: Role[];
 };
 
+/** Mock and live social sign-in. Email/password is demo-picker only. */
+export type SocialAuthKind =
+  | "google"
+  | "tiktok"
+  | "instagram"
+  | "youtube"
+  | "telegram"
+  | "facebook";
+
 export interface AuthProvider {
   getSession(): Promise<Session | null>;
   signIn(email: string, password: string): Promise<Session>;
+  signInWithSocial(provider: SocialAuthKind): Promise<Session>;
   signOut(): Promise<void>;
   register(input: {
     email: string;
     password: string;
+    displayName: string;
+    roles: Role[];
+  }): Promise<Session>;
+  registerWithSocial(input: {
+    provider: SocialAuthKind;
     displayName: string;
     roles: Role[];
   }): Promise<Session>;

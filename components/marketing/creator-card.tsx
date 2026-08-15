@@ -51,12 +51,12 @@ export function CreatorCard({ creator }: { creator: Creator }) {
           )}
         />
         <div className="absolute inset-0 bg-linear-to-t from-foreground/80 via-foreground/10 to-transparent" />
-        <p className="absolute top-3 left-3 rounded-full bg-background/90 px-2.5 py-0.5 text-xs font-medium">
+        <p className="absolute top-3 left-3 rounded-md bg-background/90 px-2.5 py-0.5 text-xs font-medium">
           {creator.rank ? `#${String(creator.rank).padStart(2, "0")} · ` : ""}
           {nicheLabel(locale, creator.niche, categories)}
         </p>
         {isPlaceholderPage(creator) ? (
-          <p className="absolute top-3 right-3 rounded-full bg-foreground/80 px-2.5 py-0.5 text-xs text-background">
+          <p className="absolute top-3 right-3 rounded-md bg-foreground/80 px-2.5 py-0.5 text-xs text-background">
             {creator.claimStatus === "claim_pending" ? t(locale, "claimReview") : t(locale, "unclaimed")}
           </p>
         ) : null}
@@ -92,7 +92,7 @@ export function CreatorCard({ creator }: { creator: Creator }) {
                 href={social.url}
                 target="_blank"
                 rel="noreferrer"
-                className="flex size-7 items-center justify-center rounded-full bg-secondary text-foreground"
+                className="flex size-7 items-center justify-center rounded-md bg-secondary text-foreground"
                 title={`@${social.handle}`}
               >
                 <span className="sr-only">

@@ -57,7 +57,7 @@ export function KycForm({ role }: KycFormProps) {
 
   if (submitted) {
     return (
-      <div className="flex flex-col gap-4 rounded-3xl bg-card p-6 ring-1 ring-foreground/10">
+      <div className="flex flex-col gap-4 rounded-md bg-card p-6 ring-1 ring-foreground/10">
         <h2 className="font-heading text-2xl font-bold">Submitted for Admin review</h2>
         <p className="text-muted-foreground">
           Files stay on this device for now. When Firebase is wired they go to private{" "}

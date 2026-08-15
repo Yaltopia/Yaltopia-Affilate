@@ -58,7 +58,7 @@ export function FilterSidebar({
   const categories = useCategories();
 
   return (
-    <aside className="flex flex-col gap-4 overflow-visible rounded-3xl bg-card p-5 ring-1 ring-foreground/8">
+    <aside className="flex flex-col gap-4 overflow-visible rounded-md bg-card p-5 ring-1 ring-foreground/8">
       <div className="flex items-center justify-between gap-2">
         <h2 className="flex items-center gap-2 font-heading text-lg font-semibold">
           <SlidersHorizontal className="size-4" aria-hidden />

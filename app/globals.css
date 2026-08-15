@@ -72,7 +72,7 @@
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --radius: 1.15rem;
+  --radius: 0.375rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -130,6 +130,43 @@
   h1, h2, h3 {
     font-family: var(--font-heading);
   }
+}
+
+.legal-prose h2 {
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.legal-prose h3 {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.legal-prose p,
+.legal-prose li {
+  color: color-mix(in oklch, var(--foreground) 82%, transparent);
+}
+
+.legal-prose ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+
+.legal-prose li + li {
+  margin-top: 0.35rem;
+}
+
+.legal-prose a {
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.legal-prose code {
+  font-size: 0.8em;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -203,6 +240,22 @@
 
   .group\/how:hover .ya-arrow {
     transform: translate(3px, -3px);
+  }
+
+  .ya-auth-ribbons {
+    background:
+      radial-gradient(ellipse 80% 55% at 12% 88%, rgb(168 199 58 / 0.55), transparent 58%),
+      radial-gradient(ellipse 70% 50% at 92% 8%, rgb(226 138 26 / 0.38), transparent 52%),
+      radial-gradient(ellipse 45% 40% at 70% 70%, rgb(168 199 58 / 0.22), transparent 60%);
+  }
+
+  .ya-auth-ribbons::after {
+    content: "";
+    position: absolute;
+    inset: -20%;
+    background:
+      conic-gradient(from 210deg at 30% 70%, transparent 0 40%, rgb(168 199 58 / 0.18) 48%, transparent 62%);
+    transform: rotate(-12deg);
   }
 }
 

@@ -1,8 +1,10 @@
 "use client";
 
+import { PLATFORM_LABELS, SocialGlyph } from "@/components/marketing/social-icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 import type { CreatorPackage, SocialPlatform } from "@/packages/contracts";
 
 const platforms: SocialPlatform[] = [
@@ -43,7 +45,7 @@ export function PackageFields({ packages, onChange }: PackageFieldsProps) {
         Every creator lists sellable packages. Advertisers brief against these prices.
       </p>
       {packages.map((pkg, index) => (
-        <div key={pkg.id} className="grid gap-2 rounded-xl bg-card p-2.5 ring-1 ring-foreground/10 sm:grid-cols-2">
+        <div key={pkg.id} className="grid gap-2 rounded-md bg-card p-2.5 ring-1 ring-foreground/10 sm:grid-cols-2">
           <p className="sm:col-span-2 text-sm font-medium">Package {index + 1}</p>
           <div className="flex flex-col gap-1">
             <Label htmlFor={`${pkg.id}-title`}>Title</Label>
@@ -54,22 +56,26 @@ export function PackageFields({ packages, onChange }: PackageFieldsProps) {
               onChange={(event) => update(pkg.id, { title: event.target.value })}
             />
           </div>
-          <div className="flex flex-col gap-1">
-            <Label htmlFor={`${pkg.id}-platform`}>Platform</Label>
-            <select
-              id={`${pkg.id}-platform`}
-              className="h-8 rounded-lg border border-input bg-background px-2.5 text-sm"
-              value={pkg.platform}
-              onChange={(event) =>
-                update(pkg.id, { platform: event.target.value as SocialPlatform })
-              }
-            >
+          <div className="flex flex-col gap-1.5 sm:col-span-2">
+            <Label>Platform</Label>
+            <div className="flex flex-wrap gap-1.5">
               {platforms.map((platform) => (
-                <option key={platform} value={platform}>
-                  {platform}
-                </option>
+                <button
+                  key={platform}
+                  type="button"
+                  onClick={() => update(pkg.id, { platform })}
+                  className={cn(
+                    "inline-flex h-9 items-center gap-1.5 rounded-md px-2.5 text-xs font-medium ring-1",
+                    pkg.platform === platform
+                      ? "bg-foreground text-background ring-foreground"
+                      : "bg-background text-foreground ring-foreground/15",
+                  )}
+                >
+                  <SocialGlyph platform={platform} className="size-3.5" />
+                  {PLATFORM_LABELS[platform]}
+                </button>
               ))}
-            </select>
+            </div>
           </div>
           <div className="flex flex-col gap-1">
             <Label htmlFor={`${pkg.id}-deliverable`}>Deliverable</Label>

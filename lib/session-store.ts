@@ -3,12 +3,13 @@
 import { useSyncExternalStore } from "react";
 
 import { audit } from "@/lib/log";
-import { demoAccounts, type MockAccount } from "@/lib/mocks/accounts";
+import { DEMO_PASSWORD, demoAccounts, type MockAccount } from "@/lib/mocks/accounts";
 import {
   homePath,
   type AuthProvider,
   type Role,
   type Session,
+  type SocialAuthKind,
 } from "@/packages/contracts";
 
 const SESSION_KEY = "ya.session";
@@ -125,6 +126,36 @@ export async function signIn(email: string, password: string): Promise<Session> 
   return match.session;
 }
 
+const SOCIAL_LOGIN_DEFAULT: Record<SocialAuthKind, string> = {
+  google: "advertiser@yaltopia.local",
+  telegram: "creator@yaltopia.local",
+  tiktok: "creator@yaltopia.local",
+  instagram: "creator@yaltopia.local",
+  youtube: "creator@yaltopia.local",
+  facebook: "creator@yaltopia.local",
+};
+
+export async function signInWithSocial(provider: SocialAuthKind): Promise<Session> {
+  hydrate();
+  const email = SOCIAL_LOGIN_DEFAULT[provider];
+  const match = allAccounts().find((account) => account.email === email);
+  if (!match) {
+    audit({
+      action: "auth.sign_in_failed",
+      meta: { reason: "social_unmapped", provider },
+      level: "warn",
+    });
+    throw new Error("That social login is not available in this demo.");
+  }
+  persistSession(match.session);
+  audit({
+    action: "auth.sign_in_social",
+    actor_id: match.session.profileId,
+    meta: { provider, roles: match.session.roles },
+  });
+  return match.session;
+}
+
 export async function registerAccount(input: {
   email: string;
   password: string;
@@ -155,6 +186,26 @@ export async function registerAccount(input: {
   return next;
 }
 
+export async function registerWithSocial(input: {
+  provider: SocialAuthKind;
+  displayName: string;
+  roles: Role[];
+}): Promise<Session> {
+  const suffix = crypto.randomUUID().slice(0, 8);
+  const session = await registerAccount({
+    email: `${input.provider}-${suffix}@yaltopia.local`,
+    password: DEMO_PASSWORD,
+    displayName: input.displayName.trim() || `${input.provider} account`,
+    roles: input.roles,
+  });
+  audit({
+    action: "auth.register_social",
+    actor_id: session.profileId,
+    meta: { provider: input.provider, roles: session.roles },
+  });
+  return session;
+}
+
 export async function signOut(): Promise<void> {
   const actor = session?.profileId;
   persistSession(null);
@@ -164,6 +215,8 @@ export async function signOut(): Promise<void> {
 export const mockAuthProvider: AuthProvider = {
   getSession: async () => getSessionSnapshot(),
   signIn,
+  signInWithSocial,
   signOut,
   register: registerAccount,
+  registerWithSocial,
 };

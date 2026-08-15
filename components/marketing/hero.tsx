@@ -34,7 +34,7 @@ export function Hero({ query, onQueryChange, onSearch }: HeroProps) {
           style={delayStyle(40)}
         >
           {t(locale, "heroLead")}{" "}
-          <span className="ya-pill-pulse inline-flex translate-y-1 items-center rounded-full border-2 border-primary px-3 py-1 text-primary">
+          <span className="ya-pill-pulse inline-flex translate-y-1 items-center rounded-md border-2 border-primary px-3 py-1 text-primary">
             <Search className="size-7" aria-hidden />
             <span className="sr-only">{t(locale, "searchHandles")}</span>
           </span>{" "}
@@ -71,14 +71,14 @@ export function Hero({ query, onQueryChange, onSearch }: HeroProps) {
             placeholder={t(locale, "searchPlaceholder")}
             className="h-12 border-0 bg-transparent text-background shadow-none placeholder:text-background/45 focus-visible:ring-0"
           />
-          <Button type="submit" size="icon" className="size-12 shrink-0 rounded-xl" aria-label={t(locale, "searchHandles")}>
+          <Button type="submit" size="icon" className="size-12 shrink-0 rounded-md" aria-label={t(locale, "searchHandles")}>
             <Search className="size-5" />
           </Button>
         </form>
       </div>
       <a
         href="#creators"
-        className="group/how ya-enter ya-hover-lift flex min-h-44 flex-col justify-between rounded-3xl bg-primary p-6 text-primary-foreground"
+        className="group/how ya-enter ya-hover-lift flex min-h-44 flex-col justify-between rounded-md bg-primary p-6 text-primary-foreground"
         style={delayStyle(280)}
       >
         <span className="flex size-10 items-center justify-center rounded-xl bg-foreground text-primary">

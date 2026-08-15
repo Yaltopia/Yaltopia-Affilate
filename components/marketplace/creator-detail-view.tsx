@@ -66,7 +66,7 @@ export function CreatorDetailView({ id }: { id: string }) {
                 {followers > 0 ? formatFollowers(followers) : "Handle claimable"}
               </p>
             </div>
-            <p className="rounded-full bg-primary px-3 py-1 text-sm font-medium text-primary-foreground">
+            <p className="rounded-md bg-primary px-3 py-1 text-sm font-medium text-primary-foreground">
               {creator.rank ? `#${creator.rank} · ` : ""}
               {nicheLabel(locale, creator.niche, categories)}
             </p>

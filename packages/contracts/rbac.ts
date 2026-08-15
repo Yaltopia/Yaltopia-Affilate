@@ -41,7 +41,9 @@ export const NAV_REGISTRY: readonly NavItem[] = [
   { id: "adv.inbox", href: "/app/inbox", label: "Inbox", portal: "advertiser", anyOf: ["advertiser"] },
   { id: "adv.analytics", href: "/app/analytics", label: "Analytics", portal: "advertiser", anyOf: ["advertiser"] },
 
-  { id: "cre.briefs", href: "/studio", label: "Briefs", portal: "creator", anyOf: ["creator"] },
+  { id: "cre.overview", href: "/studio", label: "Overview", portal: "creator", anyOf: ["creator"] },
+  { id: "cre.briefs", href: "/studio/briefs", label: "Briefs", portal: "creator", anyOf: ["creator"] },
+  { id: "cre.packages", href: "/studio/packages", label: "Packages", portal: "creator", anyOf: ["creator"] },
   { id: "cre.profile", href: "/studio/profile", label: "Profile", portal: "creator", anyOf: ["creator"] },
   { id: "cre.kyc", href: "/studio/kyc", label: "KYC", portal: "creator", anyOf: ["creator"] },
   { id: "cre.codes", href: "/studio/codes", label: "Codes & links", portal: "creator", anyOf: ["creator"] },

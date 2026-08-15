@@ -12,7 +12,7 @@ export function AnalyticsAside() {
 
   return (
     <aside className="flex flex-col gap-4">
-      <Card className="rounded-3xl">
+      <Card>
         <CardHeader>
           <CardDescription>Open briefs</CardDescription>
           <CardTitle className="font-heading text-3xl">{active}</CardTitle>
@@ -32,7 +32,7 @@ export function AnalyticsAside() {
           </p>
         </CardContent>
       </Card>
-      <Card className="rounded-3xl">
+      <Card>
         <CardHeader>
           <CardDescription>Completion</CardDescription>
           <CardTitle className="font-heading text-3xl">{rate}%</CardTitle>

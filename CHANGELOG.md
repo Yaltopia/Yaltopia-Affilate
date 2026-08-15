@@ -23,12 +23,17 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Creator packages associated on cards and `/c/{id}`. Advertisers publish posts at `/app/posts`; public order board at `/orders`. `/posts` redirects to `/orders`.
 - After agree: advertiser wallet deposit matching the order, escrow, sample revisions, posted video, creator release ask; funds send only when criteria are met.
 - Yaltopia Tech logo lockup with Affiliate wordmark; route and card loading states.
+- Gishen-style dashboard shell: collapsible sidebar from `NAV_REGISTRY`, KPI stat cards, role-grouped demo login picker.
+- Social login only (Google + five platforms). Join grants social access; creator packages live at `/studio/packages`.
+- Corners tightened (`--radius` 0.375rem). Buttons and chips use `rounded-md`, not pills.
+- Customer credit is Yaltopia Tech (Prime Store line removed from the public footer).
 - Landing directory switch: Creators or Orders. Advertiser request cards match the creator card layout (budget, platforms, KPIs, apply). Orders are not stacked above the creator grid.
 - Admin adds marketplace categories at `/admin/categories`. The public filter, creator profile, and advertiser posts use that catalog.
 - Landing filters: category and platform are multi-select dropdowns that stay open while toggling.
 - Past campaigns on creator cards and `/c/{id}`: picker, video, charged Money, and views/likes/comments. Favikon placeholders use a labeled demo portfolio until the page is claimed.
 - English and Amharic marketing copy with a persisted EN / አማ toggle.
 - Customer-site motion: hero stagger, scroll reveals, and hover lifts. Honors reduced motion.
+- Public Terms of Service (`/terms`) and Privacy Policy (`/privacy`). Social login, studio packages, KYC-after-join, wallet escrow, and RBAC are reflected. Operator is Yaltopia Tech. Placeholders remain for the Ethiopian registered address.
 - Convex as a third data-provider option (`NEXT_PUBLIC_DATA_PROVIDER=convex`) with `convex/schema.ts` matching the Firebase and Supabase mappings.
 
 ## [0.1.0] - 2026-08-15

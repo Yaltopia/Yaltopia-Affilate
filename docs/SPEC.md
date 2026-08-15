@@ -1,6 +1,6 @@
 # Yaltopia Affiliate — product spec
 
-**Yaltopia Affiliate by Prime Store.** Prime Store originated the idea.
+**Yaltopia Affiliate** by Yaltopia Tech.
 
 Open marketplace. Advertisers list offers and brief creators. Creators promote with a **promo code** and a **tracking link**. Admin’s **Payout Agent** checks what an advertiser owes and requests payment.
 
@@ -13,10 +13,12 @@ Shoppers stay anonymous.
 | `/` | Public | Marketing landing. Creators / Orders switch on the directory. |
 | `/c/{id}` | Public | Creator page. Favikon placeholders are unclaimed until the creator claims the handle. |
 | `/orders` | Public | Live advertiser orders (brands looking to sponsor). `/posts` redirects here. |
-| `/login` | Public | Same email/password for every role. Account roles pick the workspace. |
-| `/join/advertiser`, `/join/creator` | Public | Register + profile (creator packages). Signs in. No KYC here. Admin is not a join path. |
-| `/app/…` | Advertiser after login | Overview, Profile, KYC, Posts, Creators, Briefs, Wallet, Inbox, Analytics |
-| `/studio/…` | Creator after login | Briefs, Profile, KYC, Codes & links, Earnings |
+| `/terms` | Public | Terms of Service |
+| `/privacy` | Public | Privacy Policy |
+| `/login` | Public | Social login only (Google + five platforms). Gishen-style demo account picker. Split forest/cream layout. Account roles pick the workspace. |
+| `/join/advertiser`, `/join/creator` | Public | Social login, then grant social-media access. Signs in. No email/password. No packages on join. Admin is not a join path. |
+| `/app/…` | Advertiser after login | Sidebar workspace: Overview, Profile, KYC, Posts, Creators, Briefs, Wallet, Inbox, Analytics |
+| `/studio/…` | Creator after login | Sidebar workspace: Overview, Briefs, Packages, Profile, KYC, Codes & links, Earnings |
 | `/admin/…` | Admin / Payout Agent after login | Queues, KYC review, criteria, users, balances, payment requests, audit |
 | `/r/{code}` | Shoppers | Later (Vercel Edge) |
 
@@ -55,7 +57,7 @@ KYC: `incomplete` → `submitted` → `approved` \| `rejected`.
 
 ## KYC
 
-Auth signup is open. **KYC happens after registration**, not on the public package / join form. Join is account + profile (and creator packages). Then `/app/kyc` or `/studio/kyc`.
+Auth signup is social-only (mock OAuth). **KYC happens after registration**, not on join. Join is social login + grant access to TikTok, Instagram, YouTube, Telegram, and Facebook. Then `/app/kyc` or `/studio/kyc`. Creator **packages** are created in the studio at `/studio/packages`.
 
 **Marketplace access** (live offers, briefs, payouts) requires a complete KYC pack and Admin approval. Payout Agent cannot review KYC.
 
@@ -82,7 +84,7 @@ Org stays `pending_activation` until KYC is `approved`.
 
 Creator also meets `creator.min_followers` (launch 1,000+ on one social). Threshold + KYC are both required. Admin still confirms they are a real creator.
 
-Join surfaces: `/join/advertiser`, `/join/creator` (register + profile only). KYC: `/app/kyc`, `/studio/kyc`.
+Join surfaces: `/join/advertiser`, `/join/creator` (social login + social grants only). KYC: `/app/kyc`, `/studio/kyc`. Login is social buttons plus a demo-account dropdown grouped by role.
 
 ## Complete profiles
 
@@ -96,7 +98,7 @@ TikTok, Instagram, YouTube, Telegram, and Facebook each need a handle and profil
 
 - Display name, city, category (`niche` stores the category name from the admin catalog), bio
 - All five social links
-- **Packages** — associated with the creator (`creators/{id}/packages`). At least one sellable package (`title`, `platform`, `deliverable`, `price` Money). Shown on cards and `/c/{id}` after the page is claimed.
+- **Packages** — associated with the creator (`creators/{id}/packages`). Created in the studio dashboard (`/studio/packages`), not on join. At least one sellable package (`title`, `platform`, `deliverable`, `price` Money) before go-live. Shown on cards and `/c/{id}` after the page is claimed.
 - **Past campaigns** — public portfolio on the creator (`creators/{id}/campaigns` / `creator_campaigns`). Each row is `brand`, `title`, `platform`, `charged` Money, `views` / `likes` / `comments`, `video_url`, `posted_on`. Cards show a teaser (video + charge + engagement). `/c/{id}` has a campaign picker, the video, and the same stats. Favikon placeholders use a **demo portfolio** (fictional brands, sample videos) until the creator claims and confirms the work. Demo charges are not real paid deals.
 - **Claim** — Listed pages start `unclaimed`. A creator claims at `/join/creator?claim={id}` or `/studio/claim` → `claim_pending`. Admin confirms (`claimed`) or rejects (back to `unclaimed`). Admin can also **add a person** and assign a page from `/admin/pages` without waiting for a public claim. Nobody else can sell that handle.
 
@@ -176,7 +178,7 @@ Dark forest hero, then cream directory. A **Creators / Orders** switch toggles t
 3. Directory switch: **Creators** (default) or **Orders** (`#orders`). Same filter panel. Order cards are advertiser requests (budget Money, platforms, niches, KPI mins, Apply as creator). Full board also at `/orders`.
 4. Filters: **category** and **platform** are multi-select dropdowns that stay open while toggling. Category options come from the admin catalog. Follower and package-price ranges stay sliders.
 5. Creators grid: photo-forward cards (name + from-price on the image), socials, package board, past-campaign teaser (video, charged Money, views/likes/comments), link to `/c/{id}`. Detail: photo + bio, campaign picker + player + stats, sticky packages panel. Request goes to advertiser register (`/join/advertiser`), not KYC and not book-a-call.
-6. Footer: Prime Store credit. A quiet **Powered by Yaltopia Tech** line sits below. Spec, GitHub, and book-a-call stay on the README.
+6. Footer: Yaltopia Tech credit, Terms, and Privacy. Spec, GitHub, and book-a-call stay on the README.
 
 Search strips `@`, matches `creator_socials.handle`, scrolls to `#creators`. Default list is 1,000+ followers. Empty: one sentence on the grid.
 
@@ -191,7 +193,7 @@ Directory seed is the [Favikon Top 20 TikTokers in Ethiopia, May 2026](https://w
 Driven by `NAV_REGISTRY`. Filter with `navForSession`.
 
 Advertiser (`/app`): Overview, Profile, KYC, Posts, Creators, Briefs, Wallet, Inbox, Analytics.  
-Creator (`/studio`): Briefs, Profile, KYC, Codes & links, Earnings, Claim page.  
+Creator (`/studio`): Overview, Briefs, Packages, Profile, KYC, Codes & links, Earnings, Claim page.  
 Admin (`/admin`): Overview, Pages & people, Creator queue, Advertisers, KYC review, Categories, Signup criteria, Users, Balances, Payment requests, Audit.  
 Payout Agent (`/admin`): Overview, Balances, Payment requests.
 

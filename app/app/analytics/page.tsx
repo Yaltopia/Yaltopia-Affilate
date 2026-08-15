@@ -13,7 +13,7 @@ export default function AnalyticsPage() {
         <p className="text-sm text-muted-foreground">Mock ledger until Firebase is connected.</p>
       </div>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        <Card className="rounded-3xl">
+        <Card>
           <CardHeader>
             <CardDescription>Brief spend (all statuses)</CardDescription>
             <CardTitle className="font-heading text-3xl">

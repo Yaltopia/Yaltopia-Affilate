@@ -65,7 +65,7 @@ export function BriefsTable({ hrefBase = "/app/briefs" }: { hrefBase?: string })
     <div className="flex flex-col gap-5">
       <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
         <form
-          className="flex max-w-md flex-1 items-center gap-2 rounded-full bg-card px-3 py-1.5 ring-1 ring-foreground/10"
+          className="flex max-w-md flex-1 items-center gap-2 rounded-md bg-card px-3 py-1.5 ring-1 ring-foreground/10"
           onSubmit={(event) => event.preventDefault()}
         >
           <Search className="size-4 text-muted-foreground" aria-hidden />
@@ -106,7 +106,7 @@ export function BriefsTable({ hrefBase = "/app/briefs" }: { hrefBase?: string })
           </EmptyHeader>
         </Empty>
       ) : (
-        <div className="overflow-hidden rounded-3xl bg-card ring-1 ring-foreground/8">
+        <div className="overflow-hidden rounded-md bg-card ring-1 ring-foreground/8">
           <Table>
             <TableHeader>
               <TableRow>

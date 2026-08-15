@@ -1,118 +1,90 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-import { BrandLockup } from "@/components/brand/brand-lockup";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { DEMO_PASSWORD, accountLabel, demoAccounts, demoRoleHint } from "@/lib/mocks/accounts";
-import { signIn } from "@/lib/session-store";
-import { canAccessPath, homePath } from "@/packages/contracts";
+import { AuthShell } from "@/components/auth/auth-shell";
+import { DemoAccountPicker } from "@/components/auth/demo-account-picker";
+import { SocialLoginButtons } from "@/components/auth/social-login-buttons";
+import { LegalAgree } from "@/components/legal/legal-agree";
+import { t } from "@/lib/i18n";
+import { useLocale } from "@/lib/locale-store";
+import type { MockAccount } from "@/lib/mocks/accounts";
+import { signIn, signInWithSocial } from "@/lib/session-store";
+import { canAccessPath, homePath, type SocialAuthKind } from "@/packages/contracts";
 
 export function LoginForm() {
   const router = useRouter();
   const search = useSearchParams();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const locale = useLocale();
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [demoEmail, setDemoEmail] = useState<string | null>(null);
+  const [providerBusy, setProviderBusy] = useState<SocialAuthKind | null>(null);
 
-  async function go(nextEmail: string, nextPassword: string) {
+  async function land(session: Awaited<ReturnType<typeof signIn>>) {
+    const next = search.get("next");
+    const dest = next && canAccessPath(session, next) ? next : homePath(session);
+    router.replace(dest);
+    router.refresh();
+  }
+
+  async function goDemo(account: MockAccount) {
     setBusy(true);
+    setDemoEmail(account.email);
     setError("");
     try {
-      const session = await signIn(nextEmail, nextPassword);
-      const next = search.get("next");
-      const dest = next && canAccessPath(session, next) ? next : homePath(session);
-      router.replace(dest);
-      router.refresh();
+      const session = await signIn(account.email, account.password);
+      await land(session);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not sign in.");
       setBusy(false);
+      setDemoEmail(null);
     }
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    void go(email, password);
+  async function goSocial(provider: SocialAuthKind) {
+    setBusy(true);
+    setProviderBusy(provider);
+    setError("");
+    try {
+      const session = await signInWithSocial(provider);
+      await land(session);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not sign in.");
+      setBusy(false);
+      setProviderBusy(null);
+    }
   }
 
   return (
-    <main className="ya-enter mx-auto flex min-h-full w-full max-w-lg flex-col gap-8 px-3 py-10 md:px-4">
-      <BrandLockup />
-      <div className="flex flex-col gap-2">
-        <p className="text-sm font-medium text-muted-foreground">Same login for every role</p>
-        <h1 className="font-heading text-4xl font-bold tracking-tight">Log in to your workspace</h1>
-        <p className="text-muted-foreground">
-          Creators, advertisers, and Admin use this page. The account decides what you see.
-        </p>
-      </div>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-2xl bg-card p-4 ring-1 ring-foreground/8">
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="login-email">Email</Label>
-          <Input
-            id="login-email"
-            type="email"
-            autoComplete="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
+    <AuthShell panel="login">
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-1.5 text-center">
+          <h1 className="font-heading text-3xl font-bold tracking-tight">{t(locale, "welcomeBack")}</h1>
+          <p className="text-sm text-muted-foreground">{t(locale, "loginSupport")}</p>
         </div>
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="login-password">Password</Label>
-          <Input
-            id="login-password"
-            type="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </div>
+        <SocialLoginButtons busy={busy} busyProvider={providerBusy} onPick={(provider) => void goSocial(provider)} />
+        <LegalAgree />
         {error ? <p className="text-sm text-destructive">{error}</p> : null}
-        <Button type="submit" disabled={busy || !email.trim() || password.length < 8}>
-          {busy ? "Signing in…" : "Log in"}
-        </Button>
-      </form>
-      <div className="flex flex-col gap-3">
-        <p className="text-sm text-muted-foreground">
-          Mock accounts (password <span className="font-mono">{DEMO_PASSWORD}</span>). Admin is assigned — not a public join.
+        <DemoAccountPicker busy={busy} signingEmail={demoEmail} onPick={(account) => void goDemo(account)} />
+        <p className="text-center text-sm text-muted-foreground">
+          {t(locale, "noAccount")}{" "}
+          <Link href="/join/creator" className="font-semibold text-foreground underline-offset-4 hover:underline">
+            {t(locale, "creatorsJoin")}
+          </Link>
+          {" · "}
+          <Link href="/join/advertiser" className="font-semibold text-foreground underline-offset-4 hover:underline">
+            {t(locale, "joinAdvertiser")}
+          </Link>
         </p>
-        <ul className="flex flex-col gap-2">
-          {demoAccounts.map((account) => (
-            <li key={account.email}>
-              <button
-                type="button"
-                disabled={busy}
-                onClick={() => {
-                  setEmail(account.email);
-                  setPassword(account.password);
-                  void go(account.email, account.password);
-                }}
-                className="flex w-full flex-col items-start gap-0.5 rounded-xl bg-card px-3 py-2.5 text-left ring-1 ring-foreground/8 hover:ring-foreground/20"
-              >
-                <span className="text-sm font-medium">
-                  {accountLabel(account.session.roles)} · {account.email}
-                </span>
-                <span className="text-xs text-muted-foreground">{demoRoleHint[account.email]}</span>
-              </button>
-            </li>
-          ))}
-        </ul>
+        <p className="text-center">
+          <Link href="/" className="text-sm text-muted-foreground underline-offset-4 hover:underline">
+            {t(locale, "backToSite")}
+          </Link>
+        </p>
       </div>
-      <div className="flex flex-wrap gap-2">
-        <Button variant="outline" render={<Link href="/join/creator" />}>
-          Join as creator
-        </Button>
-        <Button variant="outline" render={<Link href="/join/advertiser" />}>
-          Join as advertiser
-        </Button>
-        <Button variant="ghost" render={<Link href="/" />}>
-          Back to site
-        </Button>
-      </div>
-    </main>
+    </AuthShell>
   );
 }

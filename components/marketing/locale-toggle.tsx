@@ -16,7 +16,7 @@ export function LocaleToggle({
       role="group"
       aria-label={t(locale, "language")}
       className={cn(
-        "inline-flex rounded-lg p-0.5 text-xs font-medium",
+        "inline-flex rounded-md p-0.5 text-xs font-medium",
         tone === "dark" ? "bg-background/10 text-background/70" : "bg-secondary text-muted-foreground",
       )}
     >

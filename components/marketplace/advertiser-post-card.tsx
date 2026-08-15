@@ -17,7 +17,7 @@ export function AdvertiserPostCard({ post }: { post: AdvertiserPost }) {
   return (
     <article className="ya-hover-lift group flex h-full flex-col overflow-hidden rounded-2xl bg-card ring-1 ring-foreground/10 hover:ring-foreground/20">
       <div className="relative flex min-h-44 flex-col justify-end bg-foreground p-3 text-background">
-        <p className="absolute top-3 left-3 rounded-full bg-background/90 px-2.5 py-0.5 text-xs font-medium text-foreground">
+        <p className="absolute top-3 left-3 rounded-md bg-background/90 px-2.5 py-0.5 text-xs font-medium text-foreground">
           {t(locale, "lookingToSponsor")}
         </p>
         <p className="absolute top-3 right-3 font-mono text-sm font-semibold text-primary">
@@ -32,14 +32,14 @@ export function AdvertiserPostCard({ post }: { post: AdvertiserPost }) {
           {post.platforms.map((platform) => (
             <li
               key={platform}
-              className="flex size-7 items-center justify-center rounded-full bg-secondary"
+              className="flex size-7 items-center justify-center rounded-md bg-secondary"
               title={platform}
             >
               <SocialGlyph platform={platform} />
             </li>
           ))}
           {post.niches.map((niche) => (
-            <li key={niche} className="rounded-full bg-secondary px-2 py-0.5 text-[11px]">
+            <li key={niche} className="rounded-md bg-secondary px-2 py-0.5 text-[11px]">
               {nicheLabel(locale, niche, categories)}
             </li>
           ))}

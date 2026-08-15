@@ -1,8 +1,9 @@
 "use client";
 
-import Link from "next/link";
+import { Building2, Shield, Tags, Users } from "lucide-react";
 
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { PageHeader } from "@/components/dashboard/page-header";
+import { StatCard } from "@/components/dashboard/stat-card";
 import { useAdminState } from "@/lib/admin-store";
 import { useCategories } from "@/lib/category-store";
 import { useCreators } from "@/lib/claim-store";
@@ -21,57 +22,54 @@ export default function AdminOverviewPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="font-heading text-3xl font-bold tracking-tight">
-          {isAdmin ? "Admin" : "Payout desk"}
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          Same login as the marketplace. This workspace is assigned — not a public join.
-        </p>
-      </div>
+      <PageHeader
+        title={isAdmin ? "Admin" : "Payout desk"}
+        support="Same login as the marketplace. This workspace is assigned — not a public join."
+      />
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {isAdmin ? (
           <>
-            <Stat
+            <StatCard
               href="/admin/creators"
               label="Creators pending"
-              value={String(creators.filter((row) => row.status === "pending_review").length)}
+              value={creators.filter((row) => row.status === "pending_review").length}
+              icon={Users}
+              tone="brand"
             />
-            <Stat
+            <StatCard
               href="/admin/advertisers"
               label="Advertisers pending"
-              value={String(advertisers.filter((row) => row.status === "pending_activation").length)}
+              value={advertisers.filter((row) => row.status === "pending_activation").length}
+              icon={Building2}
+              tone="forest"
             />
-            <Stat
+            <StatCard
               href="/admin/kyc"
               label="KYC submitted"
-              value={String(kyc.filter((row) => row.status === "submitted").length)}
+              value={kyc.filter((row) => row.status === "submitted").length}
+              icon={Shield}
+              tone="orange"
             />
-            <Stat href="/admin/pages" label="Page claims" value={String(pendingClaims)} />
-            <Stat href="/admin/categories" label="Categories" value={String(categories.length)} />
+            <StatCard href="/admin/pages" label="Page claims" value={pendingClaims} icon={Users} tone="muted" />
+            <StatCard
+              href="/admin/categories"
+              label="Categories"
+              value={categories.length}
+              icon={Tags}
+              tone="muted"
+            />
           </>
         ) : null}
         {session && hasCapability(session, "payout.view_balances") ? (
-          <Stat
+          <StatCard
             href="/admin/balances"
             label="Reserved across wallets"
             value={formatEtb({ amount: reserved.toFixed(2), currency: "ETB" })}
+            icon={Shield}
+            tone="orange"
           />
         ) : null}
       </div>
     </div>
-  );
-}
-
-function Stat({ href, label, value }: { href: string; label: string; value: string }) {
-  return (
-    <Link href={href}>
-      <Card className="rounded-2xl">
-        <CardHeader>
-          <CardDescription>{label}</CardDescription>
-          <CardTitle className="font-heading text-3xl">{value}</CardTitle>
-        </CardHeader>
-      </Card>
-    </Link>
   );
 }

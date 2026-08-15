@@ -1,21 +1,14 @@
 "use client";
 
+import { PLATFORM_LABELS, SocialGlyph } from "@/components/marketing/social-icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   REQUIRED_SOCIAL_PLATFORMS,
+  socialFilled,
   type SocialAccount,
   type SocialPlatform,
 } from "@/packages/contracts";
-
-const labels: Record<SocialPlatform, string> = {
-  tiktok: "TikTok",
-  instagram: "Instagram",
-  youtube: "YouTube",
-  telegram: "Telegram",
-  facebook: "Facebook",
-  other: "Other",
-};
 
 type SocialFieldsProps = {
   socials: SocialAccount[];
@@ -36,16 +29,11 @@ export function SocialFields({ socials, showFollowers = true, onChange }: Social
   function update(platform: SocialPlatform, patch: Partial<SocialAccount>) {
     const exists = socials.some((social) => social.platform === platform);
     if (!exists) {
-      onChange([
-        ...socials,
-        { platform, handle: "", url: "", followerCount: 0, ...patch },
-      ]);
+      onChange([...socials, { platform, handle: "", url: "", followerCount: 0, ...patch }]);
       return;
     }
     onChange(
-      socials.map((social) =>
-        social.platform === platform ? { ...social, ...patch } : social,
-      ),
+      socials.map((social) => (social.platform === platform ? { ...social, ...patch } : social)),
     );
   }
 
@@ -57,9 +45,21 @@ export function SocialFields({ socials, showFollowers = true, onChange }: Social
       </p>
       {REQUIRED_SOCIAL_PLATFORMS.map((platform) => {
         const row = socials.find((social) => social.platform === platform);
+        const filled = row ? socialFilled(row) : false;
         return (
-          <div key={platform} className="grid gap-2 rounded-xl bg-card p-2.5 ring-1 ring-foreground/10 sm:grid-cols-2">
-            <p className="sm:col-span-2 text-sm font-medium">{labels[platform]}</p>
+          <div
+            key={platform}
+            className="grid gap-2 rounded-md bg-card p-3 ring-1 ring-foreground/10 sm:grid-cols-2"
+          >
+            <p className="flex items-center gap-2 sm:col-span-2 text-sm font-medium">
+              <span className="flex size-9 items-center justify-center rounded-md bg-secondary">
+                <SocialGlyph platform={platform} className="size-4" />
+              </span>
+              {PLATFORM_LABELS[platform]}
+              {filled ? (
+                <span className="ml-auto text-[11px] font-normal text-muted-foreground">Ready</span>
+              ) : null}
+            </p>
             <div className="flex flex-col gap-1">
               <Label htmlFor={`${platform}-handle`}>Handle</Label>
               <Input

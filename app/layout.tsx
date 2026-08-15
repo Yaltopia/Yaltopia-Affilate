@@ -17,9 +17,9 @@ const notoEthiopic = Noto_Sans_Ethiopic({
 });
 
 export const metadata: Metadata = {
-  title: "Yaltopia Affiliate by Prime Store",
+  title: "Yaltopia Affiliate",
   description:
-    "Advertisers brief creators. Creators promote with a code and a link. Built from an idea by Prime Store.",
+    "Advertisers brief creators. Creators promote with a code and a link. Built by Yaltopia Tech.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

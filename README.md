@@ -1,6 +1,6 @@
 # Yaltopia Affiliate
 
-**Yaltopia Affiliate by Prime Store.** Prime Store originated this marketplace: advertisers list offers, creators promote with a tracking link and a promo code, and Admin’s Payout Agent requests payment from the advertiser.
+**Yaltopia Affiliate** by Yaltopia Tech. Advertisers list offers, creators promote with a tracking link and a promo code, and Admin’s Payout Agent requests payment from the advertiser.
 
 Built and maintained by **[Yaltopia Tech](https://yaltopiatech.com/)**.
 
@@ -54,7 +54,7 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) for the public landing. Log in at `/login`. Mock password for every demo account: `password8`.
+Open [http://localhost:3000](http://localhost:3000) for the public landing. Log in at `/login` with social buttons, or pick a **demo account** from the dropdown (Gishen-style). Mock password for demo users: `password8`.
 
 | Email | Workspace |
 | --- | --- |
@@ -76,4 +76,4 @@ This is a public MIT repo. Please read [CONTRIBUTING.md](CONTRIBUTING.md) and th
 
 ## License
 
-MIT © 2026 [Yaltopia Tech](https://yaltopiatech.com/). Idea credit: Prime Store.
+MIT © 2026 [Yaltopia Tech](https://yaltopiatech.com/).

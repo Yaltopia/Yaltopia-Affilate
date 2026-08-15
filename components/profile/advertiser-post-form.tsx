@@ -76,7 +76,7 @@ export function AdvertiserPostForm() {
 
   return (
     <div className="flex flex-col gap-8">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-3xl bg-card p-5 ring-1 ring-foreground/8">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-md bg-card p-5 ring-1 ring-foreground/8">
         <h2 className="font-heading text-xl font-semibold">Make a post</h2>
         <p className="text-sm text-muted-foreground">
           Creators see this on `/orders` and the landing Orders switch. They apply against your platforms, niche, and KPIs.

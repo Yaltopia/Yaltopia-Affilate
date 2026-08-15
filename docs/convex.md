@@ -4,7 +4,7 @@ Same domain as Firebase and Supabase. Tables in `convex/schema.ts` match the aut
 
 Money: `{ amount: string, currency: "ETB" }` on the document. Never store floats.
 
-New Convex project, push `convex/schema.ts`, set `NEXT_PUBLIC_DATA_PROVIDER=convex` plus `NEXT_PUBLIC_CONVEX_URL` and `CONVEX_DEPLOYMENT`. Auth is Convex Auth (email/password). `profile_roles` is the RBAC source. Same login; Admin assigns `admin` and `payout_agent`.
+New Convex project, push `convex/schema.ts`, set `NEXT_PUBLIC_DATA_PROVIDER=convex` plus `NEXT_PUBLIC_CONVEX_URL` and `CONVEX_DEPLOYMENT`. Auth is Convex Auth (social providers). `profile_roles` is the RBAC source. Same login; Admin assigns `admin` and `payout_agent`.
 
 UI never imports `convex/react` or `convex/server`. It uses `AuthProvider` and `DataProvider` in `packages/contracts/provider.ts`.
 
