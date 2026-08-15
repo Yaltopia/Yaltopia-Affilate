@@ -1,44 +1,62 @@
+"use client";
+
 import Link from "next/link";
 
+import { BrandLockup } from "@/components/brand/brand-lockup";
+import { Reveal } from "@/components/motion/reveal";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { BOOK_A_CALL_URL, GITHUB_URL, SPEC_URL, YALTOPIA_TECH_URL } from "@/lib/site";
+import { t } from "@/lib/i18n";
+import { useLocale } from "@/lib/locale-store";
+import { YALTOPIA_TECH_URL } from "@/lib/site";
 
-export function SiteFooter() {
+export function SiteFooter({ compact = false }: { compact?: boolean }) {
+  const locale = useLocale();
+  const [poweredBefore, poweredAfter] = t(locale, "poweredBy", { org: "__ORG__" }).split("__ORG__");
+
   return (
-    <footer className="mt-auto flex flex-col gap-6 px-4 py-10 md:px-10">
+    <footer
+      className={
+        compact
+          ? "mt-auto flex flex-col gap-4 px-3 py-6 md:px-4"
+          : "mt-auto flex flex-col gap-6 px-4 py-10 md:px-10"
+      }
+    >
       <Separator />
+      <Reveal from="fade" className="flex flex-col gap-6">
       <div className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
         <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-          <p>
-            Yaltopia Affiliate by Prime Store. Built by{" "}
-            <a href={YALTOPIA_TECH_URL} className="text-foreground underline underline-offset-4">
-              Yaltopia Tech
-            </a>
-            .
-          </p>
-          <p>© 2026 Yaltopia Tech.</p>
+          <BrandLockup size="sm" />
+          <p>{t(locale, "footerCredit")}</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <nav className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-            <a href={SPEC_URL} className="hover:text-foreground">
-              Spec
-            </a>
-            <a href={GITHUB_URL} className="hover:text-foreground">
-              GitHub
-            </a>
+            <Link href="/posts" className="hover:text-foreground">
+              {t(locale, "posts")}
+            </Link>
             <Link href="/join/advertiser" className="hover:text-foreground">
-              Advertisers
+              {t(locale, "advertisers")}
             </Link>
             <Link href="/join/creator" className="hover:text-foreground">
-              Creators
+              {t(locale, "creators")}
+            </Link>
+            <Link href="/login" className="hover:text-foreground">
+              {t(locale, "logIn")}
             </Link>
           </nav>
-          <Button size="sm" render={<a href={BOOK_A_CALL_URL} target="_blank" rel="noreferrer" />}>
-            Book a call
+          <Button size="sm" render={<Link href="/join/advertiser" />}>
+            {t(locale, "joinAdvertiser")}
           </Button>
         </div>
       </div>
+      <p className="text-center text-xs text-muted-foreground">
+        {poweredBefore}
+        <a href={YALTOPIA_TECH_URL} className="underline underline-offset-4 hover:text-foreground">
+          Yaltopia Tech
+        </a>
+        {poweredAfter}
+      </p>
+      </Reveal>
     </footer>
   );
 }

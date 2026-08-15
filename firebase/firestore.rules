@@ -38,6 +38,18 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
+    match /kyc_submissions/{id} {
+      allow read: if isAdmin()
+        || (signedIn() && resource.data.profile_id == request.auth.uid);
+      allow create: if signedIn() && request.resource.data.profile_id == request.auth.uid;
+      allow update: if isAdmin()
+        || (signedIn() && resource.data.profile_id == request.auth.uid
+            && !request.resource.data.diff(resource.data).affectedKeys()
+              .hasAny(["status"]));
+      allow delete: if isAdmin();
+    }
+
+    // Admin assigns roles. Same Auth login; claims.roles route the portal.
     match /profile_roles/{id} {
       allow read: if signedIn();
       allow write: if isAdmin();
@@ -56,16 +68,29 @@ service cloud.firestore {
         allow read: if isAdmin() || isOwner(uid);
         allow write: if isAdmin();
       }
+
+      match /socials/{sid} {
+        allow read: if signedIn();
+        allow write: if isAdmin()
+          || (signedIn() && get(/databases/$(database)/documents/advertisers/$(id)).data.owner_profile_id == request.auth.uid);
+      }
     }
 
     match /creators/{id} {
-      allow read: if resource.data.status == "approved" || isAdmin()
+      allow read: if resource.data.status == "approved"
+        || resource.data.claim_status in ["unclaimed", "claim_pending"]
+        || isAdmin()
         || (signedIn() && resource.data.profile_id == request.auth.uid);
-      allow create: if signedIn() && request.resource.data.profile_id == request.auth.uid;
+      allow create: if isAdmin()
+        || (signedIn() && request.resource.data.profile_id == request.auth.uid);
       allow update: if isAdmin()
         || (signedIn() && resource.data.profile_id == request.auth.uid
             && !request.resource.data.diff(resource.data).affectedKeys()
-              .hasAny(["status", "verified_at", "reviewed_by"]));
+              .hasAny(["status", "verified_at", "reviewed_by", "rank", "source"]))
+        || (signedIn() && hasRole("creator")
+            && resource.data.claim_status == "unclaimed"
+            && request.resource.data.claim_status == "claim_pending"
+            && request.resource.data.profile_id == request.auth.uid);
       allow delete: if isAdmin();
 
       match /socials/{sid} {
@@ -73,6 +98,19 @@ service cloud.firestore {
         allow write: if isAdmin()
           || (signedIn() && get(/databases/$(database)/documents/creators/$(id)).data.profile_id == request.auth.uid);
       }
+
+      match /packages/{pid} {
+        allow read: if true;
+        allow write: if isAdmin()
+          || (signedIn() && get(/databases/$(database)/documents/creators/$(id)).data.profile_id == request.auth.uid);
+      }
+    }
+
+    match /campaign_criteria/{id} {
+      allow read: if resource.data.status == "live" || isAdmin()
+        || (signedIn() && hasRole("advertiser"));
+      allow create, update: if isAdmin() || hasRole("advertiser");
+      allow delete: if isAdmin();
     }
 
     match /offers/{id} {
@@ -105,6 +143,39 @@ service cloud.firestore {
         allow read, create: if signedIn();
         allow update, delete: if isAdmin();
       }
+
+      match /samples/{sid} {
+        allow read: if signedIn();
+        allow create: if signedIn();
+        allow update, delete: if isAdmin();
+      }
+    }
+
+    match /wallets/{id} {
+      allow read: if isAdmin() || isPayoutAgent()
+        || (signedIn() && resource.data.owner_profile_id == request.auth.uid);
+      allow create, update: if isAdmin()
+        || (signedIn() && request.resource.data.owner_profile_id == request.auth.uid);
+      allow delete: if isAdmin();
+    }
+
+    match /wallet_ledger/{id} {
+      allow read: if isAdmin() || isPayoutAgent() || signedIn();
+      allow create: if signedIn();
+      allow update, delete: if isAdmin();
+    }
+
+    match /escrow_holds/{id} {
+      allow read: if signedIn();
+      allow create, update: if isAdmin() || hasRole("advertiser");
+      allow delete: if isAdmin();
+    }
+
+    match /release_requests/{id} {
+      allow read: if signedIn();
+      allow create: if hasRole("creator");
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
     }
 
     match /tracking_links/{code} {

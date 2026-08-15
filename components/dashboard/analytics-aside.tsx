@@ -4,7 +4,9 @@ import { mockBriefs } from "@/lib/mocks/briefs";
 export function AnalyticsAside() {
   const done = mockBriefs.filter((brief) => brief.status === "completed").length;
   const active = mockBriefs.filter((brief) =>
-    ["in_progress", "accepted", "submitted"].includes(brief.status),
+    ["accepted", "funded", "sample_review", "posted", "release_requested", "in_progress", "submitted"].includes(
+      brief.status,
+    ),
   ).length;
   const rate = Math.round((done / mockBriefs.length) * 100);
 

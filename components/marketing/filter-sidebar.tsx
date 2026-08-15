@@ -9,22 +9,24 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { formatEtb, formatFollowers } from "@/lib/format";
+import { nicheLabel, platformLabel, t } from "@/lib/i18n";
+import { useLocale } from "@/lib/locale-store";
 import type { SocialPlatform } from "@/packages/contracts";
 
-const platforms: { id: SocialPlatform; label: string }[] = [
-  { id: "tiktok", label: "TikTok" },
-  { id: "instagram", label: "Instagram" },
-  { id: "youtube", label: "YouTube" },
-  { id: "telegram", label: "Telegram" },
-  { id: "facebook", label: "Facebook" },
+import { MultiSelect } from "./multi-select";
+
+const platforms: SocialPlatform[] = [
+  "tiktok",
+  "instagram",
+  "youtube",
+  "telegram",
+  "facebook",
 ];
 
-export const FOLLOWER_BOUNDS = { min: 1000, max: 150000 };
-export const PRICE_BOUNDS = { min: 0, max: 25000 };
+export const FOLLOWER_BOUNDS = { min: 1000, max: 5_000_000 };
+export const PRICE_BOUNDS = { min: 0, max: 50000 };
 
 type FilterSidebarProps = {
   niches: string[];
@@ -51,64 +53,50 @@ export function FilterSidebar({
   onPrice,
   onReset,
 }: FilterSidebarProps) {
+  const locale = useLocale();
+
   return (
     <aside className="flex flex-col gap-4 rounded-3xl bg-card p-5 ring-1 ring-foreground/8">
       <div className="flex items-center justify-between gap-2">
         <h2 className="flex items-center gap-2 font-heading text-lg font-semibold">
           <SlidersHorizontal className="size-4" aria-hidden />
-          Filters
+          {t(locale, "filters")}
         </h2>
         <Button type="button" variant="ghost" size="sm" onClick={onReset}>
-          Reset
+          {t(locale, "reset")}
         </Button>
       </div>
-      <Accordion multiple defaultValue={["niche", "followers", "price", "platform"]}>
-        <AccordionItem value="niche">
-          <AccordionTrigger>Niche</AccordionTrigger>
-          <AccordionContent>
-            <ul className="flex flex-col gap-2.5">
-              {niches.map((item) => (
-                <li key={item} className="flex items-center gap-2">
-                  <Checkbox
-                    id={`niche-${item}`}
-                    checked={selectedNiches.includes(item)}
-                    onCheckedChange={() => onToggleNiche(item)}
-                  />
-                  <Label htmlFor={`niche-${item}`} className="font-normal">
-                    {item}
-                  </Label>
-                </li>
-              ))}
-            </ul>
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="platform">
-          <AccordionTrigger>Platform</AccordionTrigger>
-          <AccordionContent>
-            <ul className="flex flex-col gap-2.5">
-              {platforms.map((item) => (
-                <li key={item.id} className="flex items-center gap-2">
-                  <Checkbox
-                    id={`platform-${item.id}`}
-                    checked={selectedPlatforms.includes(item.id)}
-                    onCheckedChange={() => onTogglePlatform(item.id)}
-                  />
-                  <Label htmlFor={`platform-${item.id}`} className="font-normal">
-                    {item.label}
-                  </Label>
-                </li>
-              ))}
-            </ul>
-          </AccordionContent>
-        </AccordionItem>
+      <MultiSelect
+        label={t(locale, "category")}
+        placeholder={t(locale, "anyCategory")}
+        selectedLabel={t(locale, "selected")}
+        values={selectedNiches}
+        options={niches.map((niche) => ({
+          value: niche,
+          label: nicheLabel(locale, niche),
+        }))}
+        onToggle={onToggleNiche}
+      />
+      <MultiSelect
+        label={t(locale, "platform")}
+        placeholder={t(locale, "anyPlatform")}
+        selectedLabel={t(locale, "selected")}
+        values={selectedPlatforms}
+        options={platforms.map((platform) => ({
+          value: platform,
+          label: platformLabel(locale, platform),
+        }))}
+        onToggle={onTogglePlatform}
+      />
+      <Accordion multiple defaultValue={["followers", "price"]}>
         <AccordionItem value="followers">
-          <AccordionTrigger>Followers</AccordionTrigger>
+          <AccordionTrigger>{t(locale, "followers")}</AccordionTrigger>
           <AccordionContent>
             <div className="flex flex-col gap-3 pt-2">
               <Slider
                 min={FOLLOWER_BOUNDS.min}
                 max={FOLLOWER_BOUNDS.max}
-                step={500}
+                step={10000}
                 value={followers}
                 onValueChange={(next) => {
                   if (Array.isArray(next) && next.length >= 2) {
@@ -123,7 +111,7 @@ export function FilterSidebar({
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="price">
-          <AccordionTrigger>Brief price</AccordionTrigger>
+          <AccordionTrigger>{t(locale, "packagePrice")}</AccordionTrigger>
           <AccordionContent>
             <div className="flex flex-col gap-3 pt-2">
               <Slider

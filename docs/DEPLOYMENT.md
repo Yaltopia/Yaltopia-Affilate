@@ -13,7 +13,11 @@ Create a Firebase project. Enable Auth, Firestore, Storage. Deploy rules from `f
 
 ## Supabase (optional)
 
-New project, run `supabase/migrations/0001_affiliate_core.sql`, set `NEXT_PUBLIC_DATA_PROVIDER=supabase`.
+New project, run `supabase/migrations/0001` through `0006_page_claims.sql`, set `NEXT_PUBLIC_DATA_PROVIDER=supabase`.
+
+## Convex (optional)
+
+New Convex project, push `convex/schema.ts`, set `NEXT_PUBLIC_DATA_PROVIDER=convex` and `NEXT_PUBLIC_CONVEX_URL`. Keep `CONVEX_DEPLOYMENT` on the server. See [docs/convex.md](convex.md).
 
 ## Tracking
 

@@ -13,7 +13,7 @@ Want this for your brand, or want to ship with us?
 
 ## Status
 
-Spec + marketing landing + advertiser dashboard mock at `/app`. Live Firebase/Supabase, creator portal, Admin, and `/r/{code}` come next.
+Public landing at `/`. Workspaces open after login: advertiser `/app`, creator `/studio`, Admin `/admin`. Live Firebase / Supabase / Convex and `/r/{code}` come next.
 
 ## Who it is for
 
@@ -29,7 +29,7 @@ Spec + marketing landing + advertiser dashboard mock at `/app`. Live Firebase/Su
 - **Host:** Vercel
 - **App:** Next.js App Router, Tailwind CSS, shadcn/ui, Poppins
 - **Primary data/auth:** Firebase (Auth, Firestore, Storage)
-- **Alternate data/auth:** Supabase — same contracts, `NEXT_PUBLIC_DATA_PROVIDER=supabase`
+- **Alternate data/auth:** Supabase or Convex — same contracts, `NEXT_PUBLIC_DATA_PROVIDER=supabase` or `convex`
 
 ## Docs
 
@@ -37,6 +37,7 @@ Spec + marketing landing + advertiser dashboard mock at `/app`. Live Firebase/Su
 - [Data providers](docs/data-providers.md)
 - [Firebase](docs/firebase.md)
 - [Supabase (alternate)](docs/supabase.md)
+- [Convex (alternate)](docs/convex.md)
 - [Deployment](docs/DEPLOYMENT.md)
 - [Contributing](CONTRIBUTING.md)
 - [Security](SECURITY.md)
@@ -53,7 +54,17 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) for the landing and [http://localhost:3000/app](http://localhost:3000/app) for the advertiser dashboard. Mocks match `packages/contracts`.
+Open [http://localhost:3000](http://localhost:3000) for the public landing. Log in at `/login`. Mock password for every demo account: `password8`.
+
+| Email | Workspace |
+| --- | --- |
+| `creator@yaltopia.local` | Creator studio |
+| `advertiser@yaltopia.local` | Advertiser |
+| `both@yaltopia.local` | Both (switch) |
+| `admin@yaltopia.local` | Admin queues |
+| `payout@yaltopia.local` | Balances and payment requests only |
+
+Mocks match `packages/contracts`.
 
 ## Contributing
 

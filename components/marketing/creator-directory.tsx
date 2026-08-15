@@ -1,3 +1,5 @@
+"use client";
+
 import { Search } from "lucide-react";
 
 import {
@@ -6,43 +8,70 @@ import {
   EmptyHeader,
   EmptyTitle,
 } from "@/components/ui/empty";
-import type { Creator } from "@/packages/contracts";
+import { CreatorGridSkeleton } from "@/components/brand/page-loader";
+import { Reveal } from "@/components/motion/reveal";
+import { t } from "@/lib/i18n";
+import { useLocale } from "@/lib/locale-store";
+import { FAVIKON_ET_TIKTOK_2026, type Creator } from "@/packages/contracts";
 
 import { CreatorCard } from "./creator-card";
 
 type CreatorDirectoryProps = {
   creators: Creator[];
   query: string;
+  loading?: boolean;
 };
 
-export function CreatorDirectory({ creators, query }: CreatorDirectoryProps) {
+export function CreatorDirectory({ creators, query, loading = false }: CreatorDirectoryProps) {
+  const locale = useLocale();
+  const source = (
+    <a
+      href={FAVIKON_ET_TIKTOK_2026.sourceUrl}
+      className="underline underline-offset-4"
+      target="_blank"
+      rel="noreferrer"
+    >
+      {FAVIKON_ET_TIKTOK_2026.sourceLabel}
+    </a>
+  );
+  const [sourceBefore, sourceAfter] = t(locale, "directorySource", { source: "__SOURCE__" }).split("__SOURCE__");
+
   return (
     <div className="flex min-w-0 flex-col gap-6">
-      <div className="flex flex-col gap-1">
+      <Reveal className="flex flex-col gap-1">
         <p className="text-sm font-medium text-muted-foreground">
-          {creators.length} approved creators · 1,000+ followers
+          {t(locale, "directoryKicker", { count: creators.length })}
         </p>
         <h2 className="font-heading text-3xl font-bold tracking-tight md:text-4xl">
-          Creators
+          {t(locale, "directoryTitle")}
         </h2>
-      </div>
-      {creators.length === 0 ? (
+        <p className="text-sm text-muted-foreground">
+          {sourceBefore}
+          {source}
+          {sourceAfter}
+        </p>
+      </Reveal>
+      {loading ? (
+        <CreatorGridSkeleton />
+      ) : creators.length === 0 ? (
         <Empty className="border">
           <EmptyHeader>
             <Search className="size-6 text-muted-foreground" aria-hidden />
-            <EmptyTitle>No creator matches</EmptyTitle>
+            <EmptyTitle>{t(locale, "emptyTitle")}</EmptyTitle>
             <EmptyDescription>
               {query
-                ? `Nothing for @${query.replace(/^@+/, "")}. Try another handle, or reset filters.`
-                : "No approved creators match these filters. Reset the disclosure panel."}
+                ? t(locale, "emptyQuery", { query: query.replace(/^@+/, "") })
+                : t(locale, "emptyFilters")}
             </EmptyDescription>
           </EmptyHeader>
         </Empty>
       ) : (
         <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-          {creators.map((creator) => (
+          {creators.map((creator, index) => (
             <li key={creator.id}>
-              <CreatorCard creator={creator} />
+              <Reveal delay={Math.min(index, 8) * 55} className="h-full">
+                <CreatorCard creator={creator} />
+              </Reveal>
             </li>
           ))}
         </ul>

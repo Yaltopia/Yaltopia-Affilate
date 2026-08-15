@@ -10,13 +10,23 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ### Added
 
 - Product spec for Creator, Advertiser, Admin, and Admin-owned Payout Agent.
-- Dual-provider contract: Firebase primary, Supabase alternate.
+- Provider contract: Firebase primary; Supabase or Convex alternate via `NEXT_PUBLIC_DATA_PROVIDER`.
 - Dynamic creator signup gate (`creator.min_followers`, launch 1,000+).
 - Promo code + tracking link attribution, CPC floor, video briefs with counter-offer.
 - Public-repo hygiene (contributing, conduct, security, support, governance).
-- Marketing landing: dark hero, @handle search, Poppins, disclosure filters, creator cards (ETB brief prices).
-- Yaltopia Tech site and book-a-call links on README, header, and footer.
-- Advertiser dashboard mock at `/app` (briefs table, status badges, analytics cards).
+- Page claims: creators claim a listed handle; Admin confirms, rejects, assigns, or adds a person from `/admin/pages`.
+- Yaltopia Tech site and book-a-call stay off the customer nav. The public footer has a Powered by Yaltopia Tech line only. Book-a-call stays on the README.
+- RBAC: same login at `/login`. `/app`, `/studio`, and `/admin` are workspaces after sign-in, not the public site. One nav registry filtered by `Session.roles`. Admin is assigned; Payout Agent cannot approve or review KYC.
+- Advertiser workspace at `/app` (briefs, posts, wallet). Creator studio at `/studio` (briefs, packages, codes, earnings). Admin console at `/admin`.
+- KYC after registration at `/app/kyc` and `/studio/kyc` — not on the public package / join form or `/c/{id}`.
+- Complete profiles: all five social links for both roles; creator packages; advertiser advertising-criteria posts.
+- Creator packages associated on cards and `/c/{id}`. Advertisers publish posts at `/app/posts`; public board at `/posts`.
+- After agree: advertiser wallet deposit matching the order, escrow, sample revisions, posted video, creator release ask; funds send only when criteria are met.
+- Yaltopia Tech logo lockup with Affiliate wordmark; route and card loading states.
+- Landing filters: category and platform are multi-select dropdowns.
+- English and Amharic marketing copy with a persisted EN / አማ toggle.
+- Customer-site motion: hero stagger, scroll reveals, and hover lifts. Honors reduced motion.
+- Convex as a third data-provider option (`NEXT_PUBLIC_DATA_PROVIDER=convex`) with `convex/schema.ts` matching the Firebase and Supabase mappings.
 
 ## [0.1.0] - 2026-08-15
 

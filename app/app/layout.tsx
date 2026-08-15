@@ -1,3 +1,4 @@
+import { RequireSession } from "@/components/auth/require-session";
 import { AppShell } from "@/components/dashboard/app-shell";
 
 export default function DashboardLayout({
@@ -5,5 +6,9 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <AppShell>{children}</AppShell>;
+  return (
+    <RequireSession portal="advertiser">
+      <AppShell portal="advertiser">{children}</AppShell>
+    </RequireSession>
+  );
 }

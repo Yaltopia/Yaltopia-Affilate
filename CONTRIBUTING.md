@@ -41,11 +41,12 @@ Good first issues: copy, empty states, accessibility, mock data that still match
 
 ## Living spec
 
-If you change statuses, roles, Money, events, or authorization, update **in the same PR**:
+If you change statuses, roles, Money, events, KYC document kinds, or authorization, update **in the same PR**:
 
 - `docs/SPEC.md`
 - Firebase rules / indexes (`firebase/`)
 - Supabase SQL (`supabase/migrations/`)
+- Convex schema (`convex/schema.ts`)
 - `packages/contracts/`
 - `CHANGELOG.md` under Unreleased
 
@@ -53,7 +54,7 @@ Do not ship UI that drifts from those contracts. Dashboard mocks in `lib/mocks/`
 
 ## What not to commit
 
-- `.env`, `.env.local`, Firebase service accounts, Supabase service role keys
+- `.env`, `.env.local`, Firebase service accounts, Supabase service role keys, Convex admin keys
 - Real payout account numbers or customer PII
 - Click-fraud recipes or payout-bypass writeups (see [SECURITY.md](SECURITY.md))
 

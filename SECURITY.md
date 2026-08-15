@@ -19,4 +19,8 @@ Do not post click-fraud recipes, payout-bypass writeups, or working exploit code
 
 ## Secrets
 
-Never commit Firebase Admin keys, Supabase service role keys, or payout account details. Rotate anything that lands in git history and tell the maintainers.
+Never commit Firebase Admin keys, Supabase service role keys, Convex admin keys, or payout account details. Rotate anything that lands in git history and tell the maintainers.
+
+## KYC and identity files
+
+National IDs, TIN certificates, business licenses, selfies, and analytics screenshots are PII. Do not attach them to issues or pull requests. Do not log storage URLs. Access is owner + Admin only (`kyc/{uid}/`).

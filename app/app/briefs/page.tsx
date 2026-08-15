@@ -6,7 +6,7 @@ export default function BriefsPage() {
       <div>
         <h1 className="font-heading text-3xl font-bold tracking-tight">Briefs</h1>
         <p className="text-sm text-muted-foreground">
-          Accept, counter, and track video briefs. Statuses match the spec.
+          After agree, deposit and secure the order. Then sample, post, and release.
         </p>
       </div>
       <BriefsTable />

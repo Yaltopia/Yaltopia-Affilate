@@ -4,7 +4,7 @@
 
 ## Checklist
 
-- [ ] Spec / Firebase / Supabase / TypeScript contracts updated together if statuses, roles, Money, or RBAC changed
+- [ ] Spec / Firebase / Supabase / Convex / TypeScript contracts updated together if statuses, roles, Money, or RBAC changed
 - [ ] `CHANGELOG.md` Unreleased note
 - [ ] No secrets, `.env`, or service account files
 - [ ] RLS / Firestore rules considered

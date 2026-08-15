@@ -1,35 +1,56 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
+import { BrandLockup } from "@/components/brand/brand-lockup";
 import { Button } from "@/components/ui/button";
-import { dashboardNav } from "@/lib/dashboard-nav";
-import { BOOK_A_CALL_URL } from "@/lib/site";
+import { signOut, useSession } from "@/lib/session-store";
+import {
+  PORTAL_HOME,
+  hasRole,
+  navForSession,
+  primaryRole,
+  roleLabel,
+  type Portal,
+} from "@/packages/contracts";
 import { cn } from "@/lib/utils";
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+export function AppShell({
+  children,
+  portal,
+}: {
+  children: React.ReactNode;
+  portal: Portal;
+}) {
   const pathname = usePathname();
+  const router = useRouter();
+  const session = useSession();
+  const homeHref = PORTAL_HOME[portal];
+  const nav = session ? navForSession(session, portal) : [];
+  const canSwitch =
+    session && hasRole(session, "creator") && hasRole(session, "advertiser");
+
+  async function handleSignOut() {
+    await signOut();
+    router.replace("/login");
+    router.refresh();
+  }
 
   return (
     <div className="flex min-h-full flex-col bg-background">
-      <header className="flex flex-col gap-4 px-4 py-5 md:px-8">
+      <header className="flex flex-col gap-3 px-3 py-4 md:px-4">
         <div className="flex items-center justify-between gap-4">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="flex size-8 items-center justify-center rounded-md bg-primary font-heading text-sm font-bold text-primary-foreground">
-              YA
-            </span>
-            <span className="font-heading text-base font-semibold">Yaltopia Affiliate</span>
-          </Link>
-          <nav className="hidden rounded-full bg-card p-1 ring-1 ring-foreground/10 md:flex">
-            {dashboardNav.map((item) => {
+          <BrandLockup size="sm" />
+          <nav className="hidden rounded-full bg-card p-1 ring-1 ring-foreground/10 lg:flex">
+            {nav.map((item) => {
               const active =
-                item.href === "/app"
-                  ? pathname === "/app"
+                item.href === homeHref
+                  ? pathname === homeHref
                   : pathname.startsWith(item.href);
               return (
                 <Link
-                  key={item.href}
+                  key={item.id}
                   href={item.href}
                   className={cn(
                     "rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground",
@@ -41,17 +62,33 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               );
             })}
           </nav>
-          <Button size="sm" render={<a href={BOOK_A_CALL_URL} target="_blank" rel="noreferrer" />}>
-            Book a call
-          </Button>
+          <div className="flex items-center gap-2">
+            {session ? (
+              <p className="hidden text-xs text-muted-foreground sm:block">
+                {session.displayName} · {roleLabel(primaryRole(session))}
+              </p>
+            ) : null}
+            {canSwitch ? (
+              <Button
+                size="sm"
+                variant="outline"
+                render={<Link href={portal === "advertiser" ? "/studio" : "/app"} />}
+              >
+                {portal === "advertiser" ? "Creator studio" : "Advertiser"}
+              </Button>
+            ) : null}
+            <Button size="sm" variant="outline" onClick={() => void handleSignOut()}>
+              Sign out
+            </Button>
+          </div>
         </div>
-        <nav className="flex gap-2 overflow-x-auto md:hidden">
-          {dashboardNav.map((item) => {
+        <nav className="flex gap-2 overflow-x-auto lg:hidden">
+          {nav.map((item) => {
             const active =
-              item.href === "/app" ? pathname === "/app" : pathname.startsWith(item.href);
+              item.href === homeHref ? pathname === homeHref : pathname.startsWith(item.href);
             return (
               <Link
-                key={item.href}
+                key={item.id}
                 href={item.href}
                 className={cn(
                   "shrink-0 rounded-full px-3 py-1.5 text-sm text-muted-foreground ring-1 ring-foreground/10",
@@ -64,7 +101,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           })}
         </nav>
       </header>
-      <main className="flex-1 px-4 pb-12 md:px-8">{children}</main>
+      <main className="flex-1 px-3 pb-8 md:px-4">{children}</main>
     </div>
   );
 }

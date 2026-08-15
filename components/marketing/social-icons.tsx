@@ -1,5 +1,14 @@
 import type { SocialPlatform } from "@/packages/contracts";
 
+export const PLATFORM_LABELS: Record<SocialPlatform, string> = {
+  tiktok: "TikTok",
+  instagram: "Instagram",
+  youtube: "YouTube",
+  telegram: "Telegram",
+  facebook: "Facebook",
+  other: "Other",
+};
+
 const iconClass = "size-3.5";
 
 export function SocialGlyph({ platform }: { platform: SocialPlatform }) {

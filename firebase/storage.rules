@@ -19,5 +19,9 @@ service firebase.storage {
       allow read: if signedIn();
       allow write: if isAdmin() || (signedIn() && request.auth.uid == uid);
     }
+
+    match /kyc/{uid}/{allPaths=**} {
+      allow read, write: if isAdmin() || (signedIn() && request.auth.uid == uid);
+    }
   }
 }

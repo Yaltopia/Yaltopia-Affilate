@@ -5,7 +5,7 @@ labels: ["spec"]
 body:
   - type: markdown
     attributes:
-      value: The living-spec rule applies. The PR must update SPEC + Firebase + Supabase + TypeScript contracts together.
+      value: The living-spec rule applies. The PR must update SPEC + Firebase + Supabase + Convex + TypeScript contracts together.
   - type: textarea
     id: contract
     attributes:
@@ -21,6 +21,7 @@ body:
         - label: docs/SPEC.md
         - label: firebase/ rules or indexes
         - label: supabase/migrations
+        - label: convex/schema.ts
         - label: packages/contracts
         - label: CHANGELOG.md
     validations:

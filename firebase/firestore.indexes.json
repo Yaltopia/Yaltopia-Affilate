@@ -41,6 +41,22 @@
       ]
     },
     {
+      "collectionGroup": "campaign_criteria",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "advertiser_id", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "wallet_ledger",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "wallet_id", "order": "ASCENDING" },
+        { "fieldPath": "created_at", "order": "DESCENDING" }
+      ]
+    },
+    {
       "collectionGroup": "earnings",
       "queryScope": "COLLECTION",
       "fields": [

@@ -1,16 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import { mockCreators, mockMinFollowers } from "@/lib/mocks/creators";
-import {
-  matchesHandle,
-  maxFollowers,
-  meetsFollowerGate,
-  type SocialPlatform,
-} from "@/packages/contracts";
+import { ListedCreators } from "@/components/marketplace/listed-creators";
+import { Reveal } from "@/components/motion/reveal";
+import { mockCreators } from "@/lib/mocks/creators";
+import { type SocialPlatform } from "@/packages/contracts";
 
-import { CreatorDirectory } from "./creator-directory";
 import {
   FilterSidebar,
   FOLLOWER_BOUNDS,
@@ -21,6 +17,7 @@ import { SiteFooter } from "./site-footer";
 import { SiteHeader } from "./site-header";
 
 export function HomePage() {
+  const [ready, setReady] = useState(false);
   const [query, setQuery] = useState("");
   const [appliedQuery, setAppliedQuery] = useState("");
   const [selectedNiches, setSelectedNiches] = useState<string[]>([]);
@@ -34,32 +31,15 @@ export function HomePage() {
     PRICE_BOUNDS.max,
   ]);
 
+  useEffect(() => {
+    const timer = window.setTimeout(() => setReady(true), 400);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   const niches = useMemo(
     () => [...new Set(mockCreators.map((creator) => creator.niche))].sort(),
     [],
   );
-
-  const creators = useMemo(() => {
-    return mockCreators.filter((creator) => {
-      if (creator.status !== "approved") return false;
-      if (!meetsFollowerGate(creator, mockMinFollowers)) return false;
-      if (!matchesHandle(creator, appliedQuery)) return false;
-      if (selectedNiches.length > 0 && !selectedNiches.includes(creator.niche)) {
-        return false;
-      }
-      if (
-        selectedPlatforms.length > 0 &&
-        !creator.socials.some((social) => selectedPlatforms.includes(social.platform))
-      ) {
-        return false;
-      }
-      const count = maxFollowers(creator);
-      if (count < followers[0] || count > followers[1]) return false;
-      const fee = Number(creator.briefFee.amount);
-      if (fee < price[0] || fee > price[1]) return false;
-      return true;
-    });
-  }, [appliedQuery, selectedNiches, selectedPlatforms, followers, price]);
 
   function runSearch() {
     setAppliedQuery(query);
@@ -102,6 +82,7 @@ export function HomePage() {
         className="-mt-4 flex flex-col gap-8 rounded-t-[2.5rem] bg-background px-4 py-12 md:px-10 md:py-16"
       >
         <div className="grid items-start gap-8 lg:grid-cols-[260px_minmax(0,1fr)]">
+          <Reveal from="left">
           <FilterSidebar
             niches={niches}
             selectedNiches={selectedNiches}
@@ -114,7 +95,15 @@ export function HomePage() {
             onPrice={setPrice}
             onReset={resetFilters}
           />
-          <CreatorDirectory creators={creators} query={appliedQuery} />
+          </Reveal>
+          <ListedCreators
+            query={appliedQuery}
+            selectedNiches={selectedNiches}
+            selectedPlatforms={selectedPlatforms}
+            followers={followers}
+            price={price}
+            loading={!ready}
+          />
         </div>
       </section>
       <SiteFooter />

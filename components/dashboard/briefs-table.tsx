@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { Search } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -23,30 +24,33 @@ import {
 } from "@/components/ui/table";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { formatEtb } from "@/lib/format";
-import { mockBriefs } from "@/lib/mocks/briefs";
 import { mockCreators } from "@/lib/mocks/creators";
-import { matchesHandle, type CollaborationStatus } from "@/packages/contracts";
+import { useOrderState } from "@/lib/order-store";
+import { matchesHandle, primarySocial, type CollaborationStatus } from "@/packages/contracts";
 
 import { StatusBadge } from "./status-badge";
 
 const filters: { id: "all" | CollaborationStatus; label: string }[] = [
   { id: "all", label: "All briefs" },
-  { id: "requested", label: "Requested" },
-  { id: "in_progress", label: "In progress" },
-  { id: "submitted", label: "On review" },
-  { id: "completed", label: "Done" },
+  { id: "accepted", label: "Awaiting deposit" },
+  { id: "funded", label: "Funded" },
+  { id: "sample_review", label: "Samples" },
+  { id: "posted", label: "Posted" },
+  { id: "release_requested", label: "Release" },
+  { id: "completed", label: "Paid" },
 ];
 
 function creatorById(id: string) {
   return mockCreators.find((creator) => creator.id === id);
 }
 
-export function BriefsTable() {
+export function BriefsTable({ hrefBase = "/app/briefs" }: { hrefBase?: string }) {
+  const { briefs } = useOrderState();
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("all");
 
   const rows = useMemo(() => {
-    return mockBriefs.filter((brief) => {
+    return briefs.filter((brief) => {
       const creator = creatorById(brief.creatorId);
       if (!creator) return false;
       if (filter !== "all" && brief.status !== filter) return false;
@@ -55,7 +59,7 @@ export function BriefsTable() {
       }
       return true;
     });
-  }, [filter, query]);
+  }, [briefs, filter, query]);
 
   return (
     <div className="flex flex-col gap-5">
@@ -120,7 +124,7 @@ export function BriefsTable() {
               {rows.map((brief) => {
                 const creator = creatorById(brief.creatorId);
                 if (!creator) return null;
-                const handle = creator.socials[0]?.handle ?? creator.id;
+                const handle = primarySocial(creator)?.handle ?? creator.id;
                 return (
                   <TableRow key={brief.id} className="hover:bg-muted/40">
                     <TableCell>
@@ -139,7 +143,9 @@ export function BriefsTable() {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <p className="font-medium">{brief.offerTitle}</p>
+                      <Link href={`${hrefBase}/${brief.id}`} className="font-medium underline-offset-4 hover:underline">
+                        {brief.offerTitle}
+                      </Link>
                       <p className="max-w-xs truncate text-xs text-muted-foreground">{brief.note}</p>
                     </TableCell>
                     <TableCell className="whitespace-nowrap text-muted-foreground">

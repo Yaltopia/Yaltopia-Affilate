@@ -1,4 +1,4 @@
-import { BadgeCheck, Clock, MessageCircle, CircleDashed, AlertTriangle } from "lucide-react";
+import { BadgeCheck, Clock, MessageCircle, CircleDashed, AlertTriangle, Wallet, Play } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import type { CollaborationStatus } from "@/packages/contracts";
@@ -6,12 +6,16 @@ import type { CollaborationStatus } from "@/packages/contracts";
 const labels: Record<CollaborationStatus, string> = {
   requested: "Requested",
   countered: "Countered",
-  accepted: "Accepted",
+  accepted: "Awaiting deposit",
   rejected: "Rejected",
   expired: "Expired",
+  funded: "Funds secured",
+  sample_review: "Sample review",
+  posted: "Posted",
+  release_requested: "Release asked",
   in_progress: "In progress",
   submitted: "On review",
-  completed: "Done",
+  completed: "Paid",
   disputed: "Disputed",
 };
 
@@ -27,7 +31,25 @@ export function StatusBadge({ status }: { status: CollaborationStatus }) {
     );
   }
 
-  if (status === "in_progress" || status === "accepted") {
+  if (status === "funded" || status === "accepted") {
+    return (
+      <Badge variant="secondary">
+        <Wallet data-icon="inline-start" />
+        {label}
+      </Badge>
+    );
+  }
+
+  if (status === "posted" || status === "release_requested") {
+    return (
+      <Badge variant="outline">
+        <Play data-icon="inline-start" />
+        {label}
+      </Badge>
+    );
+  }
+
+  if (status === "in_progress" || status === "sample_review") {
     return (
       <Badge variant="secondary">
         <Clock data-icon="inline-start" />
