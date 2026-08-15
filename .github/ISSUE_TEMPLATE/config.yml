@@ -1,5 +1,11 @@
 blank_issues_enabled: false
 contact_links:
+  - name: Issue tracker
+    url: https://github.com/Yaltopia/Yaltopia-Affilate/issues
+    about: Search and follow open bugs, features, and spec changes.
+  - name: Source repository
+    url: https://github.com/Yaltopia/Yaltopia-Affilate
+    about: Clone, fork, and open a pull request.
   - name: Security report
     url: https://github.com/Yaltopia/Yaltopia-Affilate/security/advisories/new
     about: Private vulnerability reports only. Do not file a public issue.

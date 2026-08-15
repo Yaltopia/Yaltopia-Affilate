@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { t } from "@/lib/i18n";
 import { useLocale } from "@/lib/locale-store";
-import { YALTOPIA_TECH_URL } from "@/lib/site";
+import { GITHUB_ISSUES_URL, GITHUB_URL, YALTOPIA_TECH_URL } from "@/lib/site";
 
 export function SiteFooter({ compact = false }: { compact?: boolean }) {
   const locale = useLocale();
@@ -49,6 +49,12 @@ export function SiteFooter({ compact = false }: { compact?: boolean }) {
             <Link href="/login" className="hover:text-foreground">
               {t(locale, "logIn")}
             </Link>
+            <a href={GITHUB_URL} className="hover:text-foreground" rel="noreferrer">
+              {t(locale, "sourceCode")}
+            </a>
+            <a href={GITHUB_ISSUES_URL} className="hover:text-foreground" rel="noreferrer">
+              {t(locale, "issueTracker")}
+            </a>
           </nav>
           <Button size="sm" render={<Link href="/join/advertiser" />}>
             {t(locale, "joinAdvertiser")}

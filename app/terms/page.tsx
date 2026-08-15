@@ -41,8 +41,9 @@ export default function TermsPage() {
       <section>
         <h2>3. Accounts and social login</h2>
         <p>
-          There is one login for every role. You sign in with a social provider (Google, TikTok, Instagram, YouTube,
-          Telegram, or Facebook). Join is social login plus a grant of access to the five marketplace platforms.
+          There is one login for every role. You sign in with TikTok, phone, Gmail, or Instagram. YouTube, Telegram,
+          and Facebook are extra options. Join is that sign-in plus a grant of access to the five marketplace
+          platforms.
           We do not offer email/password registration on the customer site. You are responsible for the connected
           accounts and for keeping provider access under your control.
         </p>

@@ -4,6 +4,7 @@ import { useSyncExternalStore } from "react";
 
 import { audit } from "@/lib/log";
 import { DEMO_PASSWORD, demoAccounts, type MockAccount } from "@/lib/mocks/accounts";
+import { isConvexLive } from "@/lib/convex/env";
 import {
   homePath,
   type AuthProvider,
@@ -86,6 +87,10 @@ function hydrate() {
   }
 }
 
+export function applyRemoteSession(next: Session | null) {
+  persistSession(next);
+}
+
 export function getSessionSnapshot(): Session | null {
   hydrate();
   return session;
@@ -108,6 +113,17 @@ export function clearStaleAuthCookie() {
 }
 
 export async function signIn(email: string, password: string): Promise<Session> {
+  if (isConvexLive()) {
+    const { convexSignIn } = await import("@/lib/convex/session");
+    const next = await convexSignIn(email, password);
+    persistSession(next);
+    audit({
+      action: "auth.sign_in",
+      actor_id: next.profileId,
+      meta: { roles: next.roles, provider: "convex" },
+    });
+    return next;
+  }
   hydrate();
   const normalized = email.trim().toLowerCase();
   const match = allAccounts().find(
@@ -128,6 +144,7 @@ export async function signIn(email: string, password: string): Promise<Session> 
 
 const SOCIAL_LOGIN_DEFAULT: Record<SocialAuthKind, string> = {
   google: "advertiser@yaltopia.local",
+  phone: "advertiser@yaltopia.local",
   telegram: "creator@yaltopia.local",
   tiktok: "creator@yaltopia.local",
   instagram: "creator@yaltopia.local",
@@ -136,6 +153,17 @@ const SOCIAL_LOGIN_DEFAULT: Record<SocialAuthKind, string> = {
 };
 
 export async function signInWithSocial(provider: SocialAuthKind): Promise<Session> {
+  if (isConvexLive()) {
+    const { convexSignInSocial } = await import("@/lib/convex/session");
+    const next = await convexSignInSocial(provider);
+    persistSession(next);
+    audit({
+      action: "auth.sign_in_social",
+      actor_id: next.profileId,
+      meta: { provider, roles: next.roles, backend: "convex" },
+    });
+    return next;
+  }
   hydrate();
   const email = SOCIAL_LOGIN_DEFAULT[provider];
   const match = allAccounts().find((account) => account.email === email);
@@ -162,6 +190,17 @@ export async function registerAccount(input: {
   displayName: string;
   roles: Role[];
 }): Promise<Session> {
+  if (isConvexLive()) {
+    const { convexRegister } = await import("@/lib/convex/session");
+    const next = await convexRegister(input);
+    persistSession(next);
+    audit({
+      action: "auth.register",
+      actor_id: next.profileId,
+      meta: { roles: next.roles, provider: "convex" },
+    });
+    return next;
+  }
   hydrate();
   const email = input.email.trim().toLowerCase();
   if (!email || input.password.length < 8) {
@@ -207,6 +246,10 @@ export async function registerWithSocial(input: {
 }
 
 export async function signOut(): Promise<void> {
+  if (isConvexLive()) {
+    const { convexSignOut } = await import("@/lib/convex/session");
+    await convexSignOut();
+  }
   const actor = session?.profileId;
   persistSession(null);
   audit({ action: "auth.sign_out", actor_id: actor });

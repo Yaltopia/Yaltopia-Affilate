@@ -43,15 +43,21 @@ export function CreatorDetailView({ id }: { id: string }) {
     <main className="mx-auto grid w-full max-w-6xl gap-6 px-3 py-5 md:px-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(20rem,0.85fr)] lg:items-start">
       <Reveal className="flex flex-col gap-4">
       <section className="flex flex-col gap-4">
-        <div className="relative overflow-hidden rounded-2xl">
-          <Image
-            src={creator.photoUrl}
-            alt=""
-            width={1200}
-            height={900}
-            className="aspect-4/3 w-full object-cover lg:aspect-4/5"
-            priority
-          />
+        <div className="relative overflow-hidden rounded-2xl bg-secondary">
+          {creator.photoUrl ? (
+            <Image
+              src={creator.photoUrl}
+              alt={creator.displayName}
+              width={1200}
+              height={900}
+              className="aspect-4/3 w-full object-cover lg:aspect-4/5"
+              priority
+            />
+          ) : (
+            <div className="flex aspect-4/3 w-full items-center justify-center font-heading text-6xl font-bold lg:aspect-4/5">
+              {creator.displayName.slice(0, 1)}
+            </div>
+          )}
           <div className="absolute inset-0 bg-linear-to-t from-foreground/70 via-transparent to-transparent" />
           <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4 text-background">
             <div>

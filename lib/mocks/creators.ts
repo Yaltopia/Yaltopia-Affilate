@@ -7,19 +7,6 @@ import {
 
 export const mockMinFollowers = DEFAULT_MIN_FOLLOWERS;
 
-const PHOTOS = [
-  "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1589156280159-27698a70f29e?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1531384441138-2736e62e0919?auto=format&fit=crop&w=800&q=80",
-];
-
 export function emptyCreator(): Creator {
   return {
     id: "",
@@ -382,7 +369,7 @@ export const mockCreators: Creator[] = FAVIKON_ROWS.map((row, index) => {
     country: "ET",
     niche: row.niche,
     status: "pending_review",
-    photoUrl: PHOTOS[index % PHOTOS.length],
+    photoUrl: `/creators/${row.id}.webp`,
     socials: listedSocials(row.socials),
     packages: placeholderPackages(row.id),
     campaigns: placeholderCampaigns(row, index),

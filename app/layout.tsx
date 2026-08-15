@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Noto_Sans_Ethiopic, Poppins } from "next/font/google";
 
 import { LocaleHydrate } from "@/components/i18n/locale-hydrate";
+import { AppProviders } from "@/lib/convex/app-providers";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -22,12 +23,14 @@ export const metadata: Metadata = {
     "Advertisers brief creators. Creators promote with a code and a link. Built by Yaltopia Tech.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${poppins.variable} ${notoEthiopic.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
-        <LocaleHydrate />
-        {children}
+        <AppProviders>
+          <LocaleHydrate />
+          {children}
+        </AppProviders>
       </body>
     </html>
   );

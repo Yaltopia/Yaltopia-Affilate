@@ -39,17 +39,23 @@ export function CreatorCard({ creator }: { creator: Creator }) {
         {!photoReady ? (
           <div className="absolute inset-0 animate-pulse bg-secondary" aria-hidden />
         ) : null}
-        <Image
-          src={creator.photoUrl}
-          alt=""
-          width={640}
-          height={800}
-          onLoad={() => setPhotoReady(true)}
-          className={cn(
-            "aspect-4/5 w-full object-cover transition-[opacity,transform] duration-300 group-hover:scale-[1.03] motion-reduce:transform-none",
-            photoReady ? "opacity-100" : "opacity-0",
-          )}
-        />
+        {creator.photoUrl ? (
+          <Image
+            src={creator.photoUrl}
+            alt={creator.displayName}
+            width={640}
+            height={800}
+            onLoad={() => setPhotoReady(true)}
+            className={cn(
+              "aspect-4/5 w-full object-cover transition-[opacity,transform] duration-300 group-hover:scale-[1.03] motion-reduce:transform-none",
+              photoReady ? "opacity-100" : "opacity-0",
+            )}
+          />
+        ) : (
+          <div className="flex aspect-4/5 w-full items-center justify-center bg-secondary font-heading text-4xl font-bold">
+            {creator.displayName.slice(0, 1)}
+          </div>
+        )}
         <div className="absolute inset-0 bg-linear-to-t from-foreground/80 via-foreground/10 to-transparent" />
         <p className="absolute top-3 left-3 rounded-md bg-background/90 px-2.5 py-0.5 text-xs font-medium">
           {creator.rank ? `#${String(creator.rank).padStart(2, "0")} · ` : ""}

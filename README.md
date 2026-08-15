@@ -11,6 +11,19 @@ Want this for your brand, or want to ship with us?
 - **Website:** [yaltopiatech.com](https://yaltopiatech.com/)
 - **Book a call:** [yaltopiatech.com/contact](https://yaltopiatech.com/contact)
 
+## Source and tracker
+
+Public GitHub repo: [Yaltopia/Yaltopia-Affilate](https://github.com/Yaltopia/Yaltopia-Affilate)
+
+| Use | Link |
+| --- | --- |
+| Browse the issue tracker | [Issues](https://github.com/Yaltopia/Yaltopia-Affilate/issues) |
+| Open a bug, feature, or spec change | [New issue](https://github.com/Yaltopia/Yaltopia-Affilate/issues/new/choose) |
+| Pull requests | [Contribute](CONTRIBUTING.md) |
+| Security | [SECURITY.md](SECURITY.md) only |
+
+The public site footer also links Source and Issues. Do not put KYC files or secrets in issues.
+
 ## Status
 
 Public landing at `/`. Workspaces open after login: advertiser `/app`, creator `/studio`, Admin `/admin`. Live Firebase / Supabase / Convex and `/r/{code}` come next.
@@ -29,7 +42,7 @@ Public landing at `/`. Workspaces open after login: advertiser `/app`, creator `
 - **Host:** Vercel
 - **App:** Next.js App Router, Tailwind CSS, shadcn/ui, Poppins
 - **Primary data/auth:** Firebase (Auth, Firestore, Storage)
-- **Alternate data/auth:** Supabase or Convex — same contracts, `NEXT_PUBLIC_DATA_PROVIDER=supabase` or `convex`
+- **Alternate data/auth:** Supabase or Convex — same contracts, `NEXT_PUBLIC_DATA_PROVIDER=supabase` or `convex`. Convex uses Better Auth. See `docs/convex.md`.
 
 ## Docs
 

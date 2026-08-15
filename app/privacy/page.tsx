@@ -33,10 +33,10 @@ export default function PrivacyPage() {
         <h2>2. Information we collect</h2>
         <h3>2.1 Information you provide directly</h3>
         <p>
-          <strong>All users.</strong> Display name and the social-login identity you use to create and open an
-          account (Google, TikTok, Instagram, YouTube, Telegram, or Facebook). We do not collect a Platform password
-          for ordinary sign-in. If you use a demo account in a non-production environment, that test credential is
-          not your production identity.
+          <strong>All users.</strong> Display name and the sign-in identity you use (TikTok, phone, Gmail, or
+          Instagram; YouTube, Telegram, or Facebook if you pick those extra options). We do not collect a Platform
+          password for ordinary sign-in. If you use a demo account in a non-production environment, that test
+          credential is not your production identity.
         </p>
         <p>
           <strong>Social grants.</strong> When you join, you grant access for TikTok, Instagram, YouTube, Telegram,

@@ -4,6 +4,7 @@ import { FormEvent, useMemo, useState } from "react";
 import Link from "next/link";
 
 import { AuthSteps } from "@/components/auth/auth-steps";
+import { CreatePanel } from "@/components/dashboard/create-panel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -52,6 +53,11 @@ export function AdvertiserProfileForm({
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+      <CreatePanel
+        kicker="Advertiser"
+        title="Seller profile"
+        support="Complete the business profile and every social link before you go live."
+      >
       <AuthSteps steps={steps} current={step} onBack={setStep} />
       {step === 0 ? (
         <div className="grid gap-3 sm:grid-cols-2">
@@ -114,6 +120,7 @@ export function AdvertiserProfileForm({
           {kycHref ? <Button render={<Link href={kycHref} />}>Continue to KYC</Button> : null}
         </div>
       ) : null}
+      </CreatePanel>
     </form>
   );
 }

@@ -4,11 +4,12 @@ import { FormEvent, useState } from "react";
 import Link from "next/link";
 
 import { QueueTable } from "@/components/admin/queue-table";
+import { CreatePanel, FieldRow } from "@/components/dashboard/create-panel";
+import { PageHeader } from "@/components/dashboard/page-header";
 import { CategorySelect } from "@/components/marketplace/category-select";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { addUser, useAdminState } from "@/lib/admin-store";
@@ -80,70 +81,71 @@ export default function AdminPagesPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div>
-        <h1 className="font-heading text-3xl font-bold tracking-tight">Pages & people</h1>
-        <p className="text-sm text-muted-foreground">
-          Confirm creator claims, assign a page, or add a person from Admin.
-        </p>
-      </div>
+      <PageHeader
+        title="Pages & people"
+        support="Confirm creator claims, assign a page, or add a person from Admin."
+      />
 
-      <form
-        onSubmit={handleAdd}
-        className="grid gap-3 rounded-2xl bg-card p-4 ring-1 ring-foreground/8 md:grid-cols-2"
-      >
-        <p className="font-heading text-lg font-semibold md:col-span-2">Add a person</p>
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="add-name">Display name</Label>
-          <Input id="add-name" value={name} onChange={(event) => setName(event.target.value)} />
-        </div>
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="add-handle">TikTok handle</Label>
-          <Input
-            id="add-handle"
-            value={handle}
-            onChange={(event) => setHandle(event.target.value)}
-            placeholder="without @"
-          />
-        </div>
-        <CategorySelect
-          id="add-niche"
-          label="Category"
-          value={niche}
-          onChange={setNiche}
-          required
-        />
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="add-city">City</Label>
-          <Input id="add-city" value={city} onChange={(event) => setCity(event.target.value)} />
-        </div>
-        <div className="flex flex-col gap-1 md:col-span-2">
-          <Label htmlFor="add-bio">Bio</Label>
-          <Textarea id="add-bio" value={bio} onChange={(event) => setBio(event.target.value)} />
-        </div>
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="add-email">Email (optional — creates a creator login)</Label>
-          <Input
-            id="add-email"
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            placeholder="creator@brand.et"
-          />
-        </div>
-        <label className="flex items-center gap-2 self-end text-sm">
-          <input
-            type="checkbox"
-            checked={assignNow}
-            onChange={(event) => setAssignNow(event.target.checked)}
-          />
-          Assign the page to them now
-        </label>
-        {error ? <p className="text-sm text-destructive md:col-span-2">{error}</p> : null}
-        <div className="md:col-span-2">
-          <Button type="submit" disabled={!canManage}>
-            Add person
-          </Button>
-        </div>
+      <form onSubmit={handleAdd} className="max-w-3xl">
+        <CreatePanel
+          kicker="Directory"
+          title="Add a person"
+          support="Name and TikTok handle are required. Email creates a creator login."
+          footer={
+            <>
+              {error ? <p className="text-sm text-destructive">{error}</p> : <span />}
+              <Button type="submit" disabled={!canManage}>
+                Add person
+              </Button>
+            </>
+          }
+        >
+          <div className="grid gap-4 md:grid-cols-2">
+            <FieldRow label="Display name" htmlFor="add-name">
+              <Input id="add-name" value={name} onChange={(event) => setName(event.target.value)} />
+            </FieldRow>
+            <FieldRow label="TikTok handle" htmlFor="add-handle" hint="Without @">
+              <Input
+                id="add-handle"
+                value={handle}
+                onChange={(event) => setHandle(event.target.value)}
+                placeholder="without @"
+              />
+            </FieldRow>
+            <CategorySelect
+              id="add-niche"
+              label="Category"
+              value={niche}
+              onChange={setNiche}
+              required
+            />
+            <FieldRow label="City" htmlFor="add-city">
+              <Input id="add-city" value={city} onChange={(event) => setCity(event.target.value)} />
+            </FieldRow>
+            <div className="md:col-span-2">
+              <FieldRow label="Bio" htmlFor="add-bio">
+                <Textarea id="add-bio" value={bio} onChange={(event) => setBio(event.target.value)} />
+              </FieldRow>
+            </div>
+            <FieldRow label="Email (optional)" htmlFor="add-email" hint="Creates a creator login">
+              <Input
+                id="add-email"
+                type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                placeholder="creator@brand.et"
+              />
+            </FieldRow>
+            <label className="flex items-center gap-2 self-end pb-1 text-sm">
+              <input
+                type="checkbox"
+                checked={assignNow}
+                onChange={(event) => setAssignNow(event.target.checked)}
+              />
+              Assign the page to them now
+            </label>
+          </div>
+        </CreatePanel>
       </form>
 
       <QueueTable

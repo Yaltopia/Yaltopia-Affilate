@@ -28,7 +28,7 @@ npm run build
 
 ## How to propose a change
 
-1. Search existing issues. Open one if nothing matches.
+1. Search the [issue tracker](https://github.com/Yaltopia/Yaltopia-Affilate/issues). Open one if nothing matches ([new issue](https://github.com/Yaltopia/Yaltopia-Affilate/issues/new/choose)).
 2. Use the right template:
    - **Bug** — something broken
    - **Feature** — product or UI idea

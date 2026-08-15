@@ -25,6 +25,8 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Yaltopia Tech logo lockup with Affiliate wordmark; route and card loading states.
 - Ops dashboard shell: collapsible sidebar from `NAV_REGISTRY`, KPI stat cards, role-grouped demo login picker.
 - Social login only (Google + five platforms). Join grants social access; creator packages live at `/studio/packages`.
+- Login tiles: TikTok, phone, Gmail, Instagram. YouTube, Telegram, and Facebook sit under more ways to sign in.
+- Public GitHub source and issue tracker in the customer footer, README, and GitHub issue-chooser contact links.
 - Corners tightened (`--radius` 0.375rem). Buttons and chips use `rounded-md`, not pills.
 - Customer credit is Yaltopia Tech (Prime Store line removed from the public footer).
 - Landing directory switch: Creators or Orders. Advertiser request cards match the creator card layout (budget, platforms, KPIs, apply). Orders are not stacked above the creator grid.
@@ -34,7 +36,10 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - English and Amharic marketing copy with a persisted EN / አማ toggle.
 - Customer-site motion: hero stagger, scroll reveals, and hover lifts. Honors reduced motion.
 - Public Terms of Service (`/terms`) and Privacy Policy (`/privacy`). Social login, studio packages, KYC-after-join, wallet escrow, and RBAC are reflected. Operator is Yaltopia Tech. Placeholders remain for the Ethiopian registered address.
+- Creator cards use Favikon portraits from the Ethiopia TikTok ranking, stored at `/creators/{id}.webp`. Stock stand-in photos are gone.
 - Convex as a third data-provider option (`NEXT_PUBLIC_DATA_PROVIDER=convex`) with `convex/schema.ts` matching the Firebase and Supabase mappings.
+- Dashboard create surfaces share `CreatePanel` (advertiser orders, studio packages, KYC, admin category / person / signup gate).
+- Convex Better Auth (`@convex-dev/better-auth`): HTTP routes, profile ensure, marketplace seed, session isolation in `lib/convex/`. Demo email/password still maps `profile_roles`.
 
 ## [0.1.0] - 2026-08-15
 

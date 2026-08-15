@@ -21,14 +21,19 @@ export type Session = {
   roles: Role[];
 };
 
-/** Mock and live social sign-in. Email/password is demo-picker only. */
+/** Mock and live social sign-in. Email/password is demo-picker only. Phone is a primary login. */
 export type SocialAuthKind =
   | "google"
+  | "phone"
   | "tiktok"
   | "instagram"
   | "youtube"
   | "telegram"
   | "facebook";
+
+/** Shown on login/join. Others sit behind “more ways”. */
+export const LOGIN_PRIMARY: SocialAuthKind[] = ["tiktok", "phone", "google", "instagram"];
+export const LOGIN_MORE: SocialAuthKind[] = ["youtube", "telegram", "facebook"];
 
 export interface AuthProvider {
   getSession(): Promise<Session | null>;

@@ -21,8 +21,8 @@ export default async function JoinCreatorPage({
           </h1>
           <p className="text-sm text-muted-foreground">
             {listed
-              ? "Sign in with a social account, grant page access, then claim this handle. Packages are in the studio."
-              : "Social login, then grant access to your platforms. Packages are created in the studio."}
+              ? "Sign in with TikTok, phone, Gmail, or Instagram, grant page access, then claim this handle. Packages are in the studio."
+              : "TikTok, phone, Gmail, or Instagram, then grant access to your platforms. Packages are created in the studio."}
           </p>
         </div>
         <SocialJoinForm role="creator" claimId={listed?.id} listedName={listed?.displayName} />

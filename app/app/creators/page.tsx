@@ -30,7 +30,7 @@ export default function CreatorsPage() {
           >
             <Image
               src={creator.photoUrl}
-              alt=""
+              alt={creator.displayName}
               width={160}
               height={200}
               className="h-full w-24 shrink-0 object-cover sm:w-28"

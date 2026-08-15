@@ -26,12 +26,6 @@ type PersistShape = {
 const KEY = "ya.page-claims";
 const listeners = new Set<() => void>();
 
-const PHOTOS = [
-  "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80",
-];
-
 let claims: Record<string, ClaimRecord> = {
   "c-yuti": {
     claimStatus: "claim_pending",
@@ -178,7 +172,7 @@ export function addCreatorPage(
     country: "ET",
     niche: input.niche.trim() || "Lifestyle",
     status: input.assignTo ? "approved" : "pending_review",
-    photoUrl: PHOTOS[extras.length % PHOTOS.length],
+    photoUrl: "",
     socials: REQUIRED_SOCIAL_PLATFORMS.map((platform) =>
       platform === "tiktok"
         ? {

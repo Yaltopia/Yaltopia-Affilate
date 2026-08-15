@@ -3,9 +3,10 @@
 import { FormEvent, useState } from "react";
 
 import { QueueTable } from "@/components/admin/queue-table";
+import { CreatePanel, FieldRow } from "@/components/dashboard/create-panel";
+import { PageHeader } from "@/components/dashboard/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { addCategory, useCategories } from "@/lib/category-store";
 import { useSession } from "@/lib/session-store";
@@ -34,44 +35,46 @@ export default function AdminCategoriesPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div>
-        <h1 className="font-heading text-3xl font-bold tracking-tight">Categories</h1>
-        <p className="text-sm text-muted-foreground">
-          These show in the public filter, creator profiles, and advertiser posts. Creators pick from this list.
-        </p>
-      </div>
+      <PageHeader
+        title="Categories"
+        support="These show in the public filter, creator profiles, and advertiser posts. Creators pick from this list."
+      />
 
-      <form
-        onSubmit={handleAdd}
-        className="grid gap-3 rounded-2xl bg-card p-4 ring-1 ring-foreground/8 md:grid-cols-2"
-      >
-        <p className="font-heading text-lg font-semibold md:col-span-2">Add a category</p>
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="cat-name">Name (English)</Label>
-          <Input
-            id="cat-name"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            placeholder="Travel"
-            disabled={!canEdit}
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="cat-name-am">Name (Amharic)</Label>
-          <Input
-            id="cat-name-am"
-            value={nameAm}
-            onChange={(event) => setNameAm(event.target.value)}
-            placeholder="ጉዞ"
-            disabled={!canEdit}
-          />
-        </div>
-        {error ? <p className="text-sm text-destructive md:col-span-2">{error}</p> : null}
-        <div className="md:col-span-2">
-          <Button type="submit" disabled={!canEdit}>
-            Add category
-          </Button>
-        </div>
+      <form onSubmit={handleAdd} className="max-w-3xl">
+        <CreatePanel
+          kicker="Catalog"
+          title="Add a category"
+          support="English name plus Amharic. Slug is generated."
+          footer={
+            <>
+              {error ? <p className="text-sm text-destructive">{error}</p> : <span />}
+              <Button type="submit" disabled={!canEdit}>
+                Add category
+              </Button>
+            </>
+          }
+        >
+          <div className="grid gap-4 md:grid-cols-2">
+            <FieldRow label="Name (English)" htmlFor="cat-name">
+              <Input
+                id="cat-name"
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                placeholder="Travel"
+                disabled={!canEdit}
+              />
+            </FieldRow>
+            <FieldRow label="Name (Amharic)" htmlFor="cat-name-am">
+              <Input
+                id="cat-name-am"
+                value={nameAm}
+                onChange={(event) => setNameAm(event.target.value)}
+                placeholder="ጉዞ"
+                disabled={!canEdit}
+              />
+            </FieldRow>
+          </div>
+        </CreatePanel>
       </form>
 
       <QueueTable

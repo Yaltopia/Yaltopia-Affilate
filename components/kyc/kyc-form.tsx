@@ -3,6 +3,8 @@
 import { FormEvent, useMemo, useState } from "react";
 import Link from "next/link";
 
+import { CreatePanel } from "@/components/dashboard/create-panel";
+import { PageHeader } from "@/components/dashboard/page-header";
 import { Button } from "@/components/ui/button";
 import {
   ADVERTISER_KYC_DOCS,
@@ -44,6 +46,7 @@ export function KycForm({ role }: KycFormProps) {
     () => kinds.every((kind) => Boolean(files[kind])),
     [files, kinds],
   );
+  const done = kinds.filter((kind) => files[kind]).length;
 
   function handleFile(kind: KycDocumentKind, file: File) {
     setFiles((current) => ({ ...current, [kind]: file }));
@@ -57,42 +60,61 @@ export function KycForm({ role }: KycFormProps) {
 
   if (submitted) {
     return (
-      <div className="flex flex-col gap-4 rounded-md bg-card p-6 ring-1 ring-foreground/10">
-        <h2 className="font-heading text-2xl font-bold">Submitted for Admin review</h2>
-        <p className="text-muted-foreground">
-          Files stay on this device for now. When Firebase is wired they go to private{" "}
-          <span className="font-mono text-sm">kyc/{"{you}"}/</span> storage. You cannot go live
-          until Admin approves KYC.
-        </p>
-        <div className="flex flex-wrap gap-2">
+      <CreatePanel
+        kicker="KYC"
+        title="Submitted for Admin review"
+        support="Files stay on this device for now. When Convex or Firebase is live they go to private storage. You cannot go live until Admin approves KYC."
+        footer={
           <Button render={<Link href={role === "advertiser" ? "/app" : "/studio"} />}>
             {role === "advertiser" ? "Open dashboard" : "Open studio"}
           </Button>
-        </div>
-      </div>
+        }
+      >
+        <p className="text-sm text-muted-foreground">
+          Storage path is <span className="font-mono text-xs">kyc/{"{you}"}/</span>. Never share those files in issues.
+        </p>
+      </CreatePanel>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      {kinds.map((kind) => (
-        <KycUpload
-          key={kind}
-          kind={kind}
-          hint={hints[kind]}
-          capture={kind === "liveness_photo"}
-          fileName={files[kind]?.name}
-          onFile={handleFile}
-        />
-      ))}
-      <Button type="submit" disabled={!complete}>
-        Submit KYC for review
-      </Button>
-      {!complete ? (
-        <p className="text-sm text-muted-foreground">
-          Add every required file before you can submit.
-        </p>
-      ) : null}
+    <form onSubmit={handleSubmit} className="flex max-w-3xl flex-col gap-4">
+      <PageHeader
+        title="KYC"
+        support={
+          role === "advertiser"
+            ? "TIN certificate, national ID, and business license. Admin reviews before you go live."
+            : "National ID, a live photo, and ownership screenshots. Not part of the package form."
+        }
+      />
+      <CreatePanel
+        kicker={`${String(done).padStart(2, "0")} / ${String(kinds.length).padStart(2, "0")}`}
+        title="Required files"
+        support="Every slot is required. Images or PDF."
+        footer={
+          <>
+            <p className="text-xs text-muted-foreground">
+              {complete ? "Ready to send." : "Add every required file before you can submit."}
+            </p>
+            <Button type="submit" disabled={!complete}>
+              Submit KYC for review
+            </Button>
+          </>
+        }
+      >
+        <div className="flex flex-col gap-3">
+          {kinds.map((kind) => (
+            <KycUpload
+              key={kind}
+              kind={kind}
+              hint={hints[kind]}
+              capture={kind === "liveness_photo"}
+              fileName={files[kind]?.name}
+              onFile={handleFile}
+            />
+          ))}
+        </div>
+      </CreatePanel>
     </form>
   );
 }

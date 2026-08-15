@@ -152,6 +152,7 @@ export default defineSchema({
     city: v.optional(v.string()),
     niche: v.string(),
     photoUrl: v.optional(v.string()),
+    slug: v.optional(v.string()),
     status: creatorStatus,
     claimStatus,
     source: v.optional(v.string()),
@@ -166,7 +167,8 @@ export default defineSchema({
   })
     .index("by_profile", ["profileId"])
     .index("by_status", ["status"])
-    .index("by_claim_status", ["claimStatus"]),
+    .index("by_claim_status", ["claimStatus"])
+    .index("by_slug", ["slug"]),
 
   creator_socials: defineTable({
     creatorId: v.id("creators"),

@@ -15,14 +15,14 @@ Shoppers stay anonymous.
 | `/orders` | Public | Live advertiser orders (brands looking to sponsor). `/posts` redirects here. |
 | `/terms` | Public | Terms of Service |
 | `/privacy` | Public | Privacy Policy |
-| `/login` | Public | Social login only (Google + five platforms). Role-grouped demo account picker. Split forest/cream layout. Account roles pick the workspace. |
-| `/join/advertiser`, `/join/creator` | Public | Social login, then grant social-media access. Signs in. No email/password. No packages on join. Admin is not a join path. |
+| `/login` | Public | TikTok, phone, Gmail, Instagram. YouTube, Telegram, and Facebook sit under more ways to sign in. Role-grouped demo picker. Account roles pick the workspace. |
+| `/join/advertiser`, `/join/creator` | Public | Same login tiles, then grant marketplace platforms. Signs in. No email/password. No packages on join. Admin is not a join path. |
 | `/app/…` | Advertiser after login | Sidebar workspace: Overview, Profile, KYC, Posts, Creators, Briefs, Wallet, Inbox, Analytics |
 | `/studio/…` | Creator after login | Sidebar workspace: Overview, Briefs, Packages, Profile, KYC, Codes & links, Earnings |
 | `/admin/…` | Admin / Payout Agent after login | Queues, KYC review, criteria, users, balances, payment requests, audit |
 | `/r/{code}` | Shoppers | Later (Vercel Edge) |
 
-Stack: Next.js App Router, Tailwind CSS, shadcn/ui, Vercel. Firebase primary. Supabase or Convex alternate via `NEXT_PUBLIC_DATA_PROVIDER` (`firebase` \| `supabase` \| `convex`).
+Stack: Next.js App Router, Tailwind CSS, shadcn/ui, Vercel. Firebase primary. Supabase or Convex alternate via `NEXT_PUBLIC_DATA_PROVIDER` (`firebase` \| `supabase` \| `convex`). Convex auth is Better Auth (`@convex-dev/better-auth`); see [docs/convex.md](convex.md). Dashboard create forms (orders, packages, KYC, admin catalog) use a shared `CreatePanel`.
 
 ## Roles
 
@@ -57,7 +57,7 @@ KYC: `incomplete` → `submitted` → `approved` \| `rejected`.
 
 ## KYC
 
-Auth signup is social-only (mock OAuth). **KYC happens after registration**, not on join. Join is social login + grant access to TikTok, Instagram, YouTube, Telegram, and Facebook. Then `/app/kyc` or `/studio/kyc`. Creator **packages** are created in the studio at `/studio/packages`.
+Auth signup is TikTok, phone, Gmail, or Instagram (YouTube, Telegram, and Facebook under more ways). **KYC happens after registration**, not on join. Join is that sign-in + grant access to TikTok, Instagram, YouTube, Telegram, and Facebook. Then `/app/kyc` or `/studio/kyc`. Creator **packages** are created in the studio at `/studio/packages`.
 
 **Marketplace access** (live offers, briefs, payouts) requires a complete KYC pack and Admin approval. Payout Agent cannot review KYC.
 
@@ -178,7 +178,7 @@ Dark forest hero, then cream directory. A **Creators / Orders** switch toggles t
 3. Directory switch: **Creators** (default) or **Orders** (`#orders`). Same filter panel. Order cards are advertiser requests (budget Money, platforms, niches, KPI mins, Apply as creator). Full board also at `/orders`.
 4. Filters: **category** and **platform** are multi-select dropdowns that stay open while toggling. Category options come from the admin catalog. Follower and package-price ranges stay sliders.
 5. Creators grid: photo-forward cards (name + from-price on the image), socials, package board, past-campaign teaser (video, charged Money, views/likes/comments), link to `/c/{id}`. Detail: photo + bio, campaign picker + player + stats, sticky packages panel. Request goes to advertiser register (`/join/advertiser`), not KYC and not book-a-call.
-6. Footer: Yaltopia Tech credit, Terms, and Privacy. Spec, GitHub, and book-a-call stay on the README.
+6. Footer: Yaltopia Tech credit, Terms, Privacy, **Source** (`GITHUB_URL`), and **Issues** (`GITHUB_ISSUES_URL`). Book-a-call stays on the README.
 
 Search strips `@`, matches `creator_socials.handle`, scrolls to `#creators`. Default list is 1,000+ followers. Empty: one sentence on the grid.
 
@@ -186,7 +186,7 @@ Search strips `@`, matches `creator_socials.handle`, scrolls to `#creators`. Def
 
 **Motion:** Customer surfaces use a short rise/fade on first paint and IntersectionObserver reveals on scroll (hero stagger, filters, cards, footer). Hover lifts cards and the “See how it works” tile. No scroll hijack, marquees, or looping decoration. `prefers-reduced-motion: reduce` turns motion off.
 
-Directory seed is the [Favikon Top 20 TikTokers in Ethiopia, May 2026](https://www.favikon.com/blog/top-tiktokers-ethiopia): rank, name, bio, TikTok score, and platforms named on that page. These are **placeholder pages**. Suggested handles are claimable by the creators (`claim_status`: `unclaimed` → `claim_pending` → `claimed`). Admin can add a person and assign a page from `/admin/pages`. Follower counts are only stored when Favikon stated them (SolozTactic 200k TikTok, Eshetu Melese 3M+ YouTube). Photos are stand-ins. Past-campaign rows on placeholders are a demo portfolio for trust — fictional brands and sample videos, not claimed paid work. Shapes match `packages/contracts`.
+Directory seed is the [Favikon Top 20 TikTokers in Ethiopia, May 2026](https://www.favikon.com/blog/top-tiktokers-ethiopia): rank, name, bio, TikTok score, platforms named on that page, and Favikon portraits at `/creators/{id}.webp`. These are **placeholder pages**. Suggested handles are claimable by the creators (`claim_status`: `unclaimed` → `claim_pending` → `claimed`). Admin can add a person and assign a page from `/admin/pages`. Follower counts are only stored when Favikon stated them (SolozTactic 200k TikTok, Eshetu Melese 3M+ YouTube). Past-campaign rows on placeholders are a demo portfolio for trust — fictional brands and sample videos, not claimed paid work. Shapes match `packages/contracts`.
 
 ## Customer and Admin nav
 

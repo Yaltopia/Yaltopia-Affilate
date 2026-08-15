@@ -39,21 +39,39 @@ export function PackageFields({ packages, onChange }: PackageFieldsProps) {
   }
 
   return (
-    <fieldset className="flex flex-col gap-3">
-      <legend className="text-sm font-medium">Packages</legend>
-      <p className="text-sm text-muted-foreground">
-        Every creator lists sellable packages. Advertisers brief against these prices.
-      </p>
+    <div className="flex flex-col gap-3">
+      {packages.length === 0 ? (
+        <p className="rounded-md bg-secondary/50 px-4 py-8 text-center text-sm text-muted-foreground">
+          No packages yet. Add one sellable deliverable advertisers can brief against.
+        </p>
+      ) : null}
       {packages.map((pkg, index) => (
-        <div key={pkg.id} className="grid gap-2 rounded-md bg-card p-2.5 ring-1 ring-foreground/10 sm:grid-cols-2">
-          <p className="sm:col-span-2 text-sm font-medium">Package {index + 1}</p>
-          <div className="flex flex-col gap-1">
+        <div
+          key={pkg.id}
+          className="grid gap-3 rounded-md bg-card p-4 ring-1 ring-foreground/10 sm:grid-cols-2"
+        >
+          <p className="sm:col-span-2 text-[11px] font-medium tracking-[0.16em] text-muted-foreground uppercase">
+            Package {String(index + 1).padStart(2, "0")}
+          </p>
+          <div className="flex flex-col gap-1.5">
             <Label htmlFor={`${pkg.id}-title`}>Title</Label>
             <Input
               id={`${pkg.id}-title`}
               value={pkg.title}
               placeholder="TikTok video"
               onChange={(event) => update(pkg.id, { title: event.target.value })}
+            />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor={`${pkg.id}-price`}>Price (ETB)</Label>
+            <Input
+              id={`${pkg.id}-price`}
+              inputMode="decimal"
+              value={pkg.price.amount}
+              placeholder="8500.00"
+              onChange={(event) =>
+                update(pkg.id, { price: { amount: event.target.value, currency: "ETB" } })
+              }
             />
           </div>
           <div className="flex flex-col gap-1.5 sm:col-span-2">
@@ -77,25 +95,13 @@ export function PackageFields({ packages, onChange }: PackageFieldsProps) {
               ))}
             </div>
           </div>
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1.5 sm:col-span-2">
             <Label htmlFor={`${pkg.id}-deliverable`}>Deliverable</Label>
             <Input
               id={`${pkg.id}-deliverable`}
               value={pkg.deliverable}
               placeholder="video_post"
               onChange={(event) => update(pkg.id, { deliverable: event.target.value })}
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <Label htmlFor={`${pkg.id}-price`}>Price (ETB)</Label>
-            <Input
-              id={`${pkg.id}-price`}
-              inputMode="decimal"
-              value={pkg.price.amount}
-              placeholder="8500.00"
-              onChange={(event) =>
-                update(pkg.id, { price: { amount: event.target.value, currency: "ETB" } })
-              }
             />
           </div>
           <Button
@@ -112,6 +118,6 @@ export function PackageFields({ packages, onChange }: PackageFieldsProps) {
       <Button type="button" variant="outline" onClick={addPackage}>
         Add package
       </Button>
-    </fieldset>
+    </div>
   );
 }

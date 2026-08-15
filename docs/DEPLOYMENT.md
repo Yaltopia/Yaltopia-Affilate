@@ -17,7 +17,7 @@ New project, run `supabase/migrations/0001` through `0006_page_claims.sql`, set 
 
 ## Convex (optional)
 
-New Convex project, push `convex/schema.ts`, set `NEXT_PUBLIC_DATA_PROVIDER=convex` and `NEXT_PUBLIC_CONVEX_URL`. Keep `CONVEX_DEPLOYMENT` on the server. See [docs/convex.md](convex.md).
+New Convex project, `npx convex dev`, Better Auth secrets (`BETTER_AUTH_SECRET`, `SITE_URL`), `NEXT_PUBLIC_DATA_PROVIDER=convex`, `NEXT_PUBLIC_CONVEX_URL`, `NEXT_PUBLIC_CONVEX_SITE_URL`. Seed with `npx convex run seed:marketplace`. See [docs/convex.md](convex.md).
 
 ## Tracking
 

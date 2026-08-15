@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { CreatePanel } from "@/components/dashboard/create-panel";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { PackageFields } from "@/components/profile/package-fields";
 import { Button } from "@/components/ui/button";
@@ -17,20 +18,32 @@ export default function StudioPackagesPage() {
     packages.every((pkg) => Boolean(pkg.title.trim() && pkg.deliverable.trim() && isPricedMoney(pkg.price)));
 
   return (
-    <div className="flex w-full max-w-2xl flex-col gap-6">
+    <div className="flex w-full max-w-3xl flex-col gap-6">
       <PageHeader
         title="Packages"
-        support="Sellable packages advertisers brief against. Handle and profile stay on Profile."
+        support="Sellable deliverables advertisers brief against. Profile stays on its own page."
       />
-      <PackageFields packages={packages} onChange={setPackages} />
-      <Button
-        type="button"
-        disabled={!ok}
-        onClick={() => setSaved(true)}
+      <CreatePanel
+        kicker="Studio"
+        title="List what you sell"
+        support="Title, platform, deliverable, and a priced Money amount in ETB."
+        footer={
+          <>
+            <p className="text-xs text-muted-foreground">
+              {saved
+                ? "Saved on this demo profile."
+                : ok
+                  ? "At least one complete package."
+                  : "Add a title, deliverable, and price on every package."}
+            </p>
+            <Button type="button" disabled={!ok} onClick={() => setSaved(true)}>
+              Save packages
+            </Button>
+          </>
+        }
       >
-        Save packages
-      </Button>
-      {saved ? <p className="text-sm">Packages saved on this demo profile.</p> : null}
+        <PackageFields packages={packages} onChange={setPackages} />
+      </CreatePanel>
     </div>
   );
 }

@@ -19,7 +19,7 @@ export function KycUpload({ kind, hint, capture, fileName, onFile }: KycUploadPr
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <div className="flex flex-col gap-2 rounded-2xl bg-card p-4 ring-1 ring-foreground/10">
+    <div className="flex flex-col gap-2 rounded-md bg-card p-4 ring-1 ring-foreground/10">
       <Label htmlFor={`kyc-${kind}`}>{KYC_LABELS[kind]}</Label>
       <p className="text-sm text-muted-foreground">{hint}</p>
       <input
