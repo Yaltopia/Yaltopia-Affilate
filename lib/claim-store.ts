@@ -59,7 +59,8 @@ function socialUrl(platform: SocialPlatform, handle: string): string {
 function rebuild() {
   snapshot = [...mockCreators, ...extras].map((creator) => {
     const row = claims[creator.id];
-    return row ? { ...creator, ...row } : creator;
+    const next = row ? { ...creator, ...row } : creator;
+    return { ...next, campaigns: next.campaigns ?? [], packages: next.packages ?? [] };
   });
 }
 
@@ -189,6 +190,7 @@ export function addCreatorPage(
         : { platform, handle: "", url: "", followerCount: 0 },
     ),
     packages: [],
+    campaigns: [],
     briefFee: { amount: "0.00", currency: "ETB" },
     maxFollowersDeclared: 0,
     minFollowersRequired: DEFAULT_MIN_FOLLOWERS.amount,

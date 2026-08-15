@@ -7,13 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useCategories } from "@/lib/category-store";
 import { mockAdvertiser } from "@/lib/mocks/advertiser";
 import { mockPosts } from "@/lib/mocks/criteria";
 import { REQUIRED_SOCIAL_PLATFORMS, type AdvertiserPost, type SocialPlatform } from "@/packages/contracts";
 
-const niches = ["Lifestyle", "Comedy", "Fashion", "Tech", "Food", "Music", "Beauty", "Sports"];
-
 export function AdvertiserPostForm() {
+  const niches = useCategories()
+    .filter((category) => category.active)
+    .map((category) => category.name);
   const [posts, setPosts] = useState<AdvertiserPost[]>(mockPosts);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -77,7 +79,7 @@ export function AdvertiserPostForm() {
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-3xl bg-card p-5 ring-1 ring-foreground/8">
         <h2 className="font-heading text-xl font-semibold">Make a post</h2>
         <p className="text-sm text-muted-foreground">
-          Creators see this on the public board and can apply against your platforms, niche, and KPIs.
+          Creators see this on `/orders` and the landing Orders switch. They apply against your platforms, niche, and KPIs.
         </p>
         <div className="flex flex-col gap-1">
           <Label htmlFor="post-title">Title</Label>

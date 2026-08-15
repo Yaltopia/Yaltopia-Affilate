@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react";
 import Link from "next/link";
 
 import { QueueTable } from "@/components/admin/queue-table";
+import { CategorySelect } from "@/components/marketplace/category-select";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -104,10 +105,13 @@ export default function AdminPagesPage() {
             placeholder="without @"
           />
         </div>
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="add-niche">Niche</Label>
-          <Input id="add-niche" value={niche} onChange={(event) => setNiche(event.target.value)} />
-        </div>
+        <CategorySelect
+          id="add-niche"
+          label="Category"
+          value={niche}
+          onChange={setNiche}
+          required
+        />
         <div className="flex flex-col gap-1">
           <Label htmlFor="add-city">City</Label>
           <Input id="add-city" value={city} onChange={(event) => setCity(event.target.value)} />

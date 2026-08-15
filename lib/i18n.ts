@@ -44,6 +44,26 @@ export const copy = {
     language: "Language",
     footerCredit: "Yaltopia Affiliate by Prime Store.",
     poweredBy: "Powered by {org}",
+    pastCampaigns: "Past campaigns",
+    pickCampaign: "Choose a campaign",
+    charged: "Charged",
+    views: "Views",
+    likes: "Likes",
+    comments: "Comments",
+    watchVideo: "Watch video",
+    noCampaigns: "No past campaigns on this page yet.",
+    demoPortfolio: "Demo portfolio until the creator claims and confirms the work.",
+    campaignCount: "{count} past campaigns",
+    orders: "Orders",
+    ordersKicker: "Advertisers looking to sponsor",
+    ordersTitle: "Open orders",
+    ordersSupport: "Brands post what they need. Creators apply. Pay on a tracked code.",
+    seeAllOrders: "See all orders",
+    applyAsCreator: "Apply as creator",
+    postAnOrder: "Post an order",
+    lookingToSponsor: "Looking to sponsor",
+    noOrders: "No open orders right now.",
+    browseMode: "Browse creators or orders",
   },
   am: {
     filters: "\u121b\u1323\u122a\u12eb\u12ce\u127d",
@@ -96,6 +116,26 @@ export const copy = {
     language: "\u124b\u1295\u124b",
     footerCredit: "Yaltopia Affiliate by Prime Store\u1362",
     poweredBy: "\u12e8\u1270\u130e\u120b\u1260\u1270\u12cd \u1260 {org}",
+    pastCampaigns: "\u12e8\u1240\u12f5\u121e \u12d8\u1218\u127b\u12ce\u127d",
+    pickCampaign: "\u12d8\u1218\u127b \u12ed\u121d\u1228\u1321",
+    charged: "\u12e8\u1270\u12a8\u1348\u1208",
+    views: "\u12a5\u12ed\u1273\u12ce\u127d",
+    likes: "\u1218\u12cd\u12f0\u12f6\u127d",
+    comments: "\u12a0\u1235\u1270\u12eb\u12e8\u1276\u127d",
+    watchVideo: "\u126a\u12f2\u12ee \u12ed\u1218\u120d\u12a8\u1271",
+    noCampaigns: "\u1260\u12da\u1205 \u1308\u133d \u12e8\u1240\u12f5\u121e \u12d8\u1218\u127b \u12e8\u1208\u121d\u1362",
+    demoPortfolio: "\u12e8\u121b\u1233\u12eb \u1235\u122b \u2014 \u1348\u1323\u122a\u12cd \u12a5\u1235\u12aa\u1320\u12ed\u1245 \u12f5\u1228\u1235 \u12e8\u1270\u12a8\u1348\u1208\u12cd \u12a0\u12ed\u1228\u130b\u1308\u1325\u121d\u1362",
+    campaignCount: "{count} \u12e8\u1240\u12f5\u121e \u12d8\u1218\u127b\u12ce\u127d",
+    orders: "\u1275\u12d5\u12db\u12dd\u127d",
+    ordersKicker: "\u12a0\u1235\u1273\u12cb\u1242\u12ce\u127d \u1235\u1356\u1295\u1230\u122d \u1208\u1218\u1235\u1320\u1275 \u12ed\u1348\u120d\u130b\u1209",
+    ordersTitle: "\u12ad\u134d\u1275 \u1275\u12d5\u12db\u12dd\u127d",
+    ordersSupport: "\u1265\u122b\u1295\u12f6\u127d \u12e8\u121a\u1348\u120d\u1309\u1275\u1295 \u12ed\u1208\u1325\u134b\u1209\u1362 \u1348\u1323\u122a\u12ce\u127d \u12eb\u1218\u1208\u12ad\u1273\u1209\u1362",
+    seeAllOrders: "\u1201\u1209\u1295\u121d \u1275\u12d5\u12db\u12dd\u127d \u12ed\u1218\u120d\u12a8\u1271",
+    applyAsCreator: "\u12a5\u1295\u12f0 \u1348\u1323\u122a \u12eb\u1218\u1208\u12ad\u1271",
+    postAnOrder: "\u1275\u12d5\u12db\u12dd \u12ed\u1208\u1325\u1349",
+    lookingToSponsor: "\u1235\u1356\u1295\u1230\u122d \u1208\u1218\u1235\u1320\u1275",
+    noOrders: "\u12a0\u1201\u1295 \u12ad\u134d\u1275 \u1275\u12d5\u12db\u12dd \u12e8\u1208\u121d\u1362",
+    browseMode: "\u1348\u1323\u122a\u12ce\u127d \u12c8\u12ed\u121d \u1275\u12d5\u12db\u12dd\u127d",
   },
 } as const;
 
@@ -151,8 +191,14 @@ export function t(locale: Locale, key: CopyKey, vars?: Record<string, string | n
   return value;
 }
 
-export function nicheLabel(locale: Locale, niche: string): string {
-  return nicheLabels[locale][niche] ?? niche;
+export function nicheLabel(
+  locale: Locale,
+  niche: string,
+  categories: { name: string; nameAm: string; slug?: string }[] = [],
+): string {
+  const match = categories.find((category) => category.name === niche);
+  if (locale === "am" && match?.nameAm) return match.nameAm;
+  return nicheLabels[locale][niche] ?? match?.name ?? niche;
 }
 
 export function platformLabel(locale: Locale, platform: SocialPlatform): string {

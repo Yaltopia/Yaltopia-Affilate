@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { formatEtb, formatFollowers } from "@/lib/format";
+import { useCategories } from "@/lib/category-store";
 import { nicheLabel, platformLabel, t } from "@/lib/i18n";
 import { useLocale } from "@/lib/locale-store";
 import type { SocialPlatform } from "@/packages/contracts";
@@ -54,9 +55,10 @@ export function FilterSidebar({
   onReset,
 }: FilterSidebarProps) {
   const locale = useLocale();
+  const categories = useCategories();
 
   return (
-    <aside className="flex flex-col gap-4 rounded-3xl bg-card p-5 ring-1 ring-foreground/8">
+    <aside className="flex flex-col gap-4 overflow-visible rounded-3xl bg-card p-5 ring-1 ring-foreground/8">
       <div className="flex items-center justify-between gap-2">
         <h2 className="flex items-center gap-2 font-heading text-lg font-semibold">
           <SlidersHorizontal className="size-4" aria-hidden />
@@ -73,7 +75,7 @@ export function FilterSidebar({
         values={selectedNiches}
         options={niches.map((niche) => ({
           value: niche,
-          label: nicheLabel(locale, niche),
+          label: nicheLabel(locale, niche, categories),
         }))}
         onToggle={onToggleNiche}
       />

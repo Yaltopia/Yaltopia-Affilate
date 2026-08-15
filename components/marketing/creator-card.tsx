@@ -7,7 +7,9 @@ import { BadgeCheck } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
+import { CampaignTeaser } from "@/components/marketplace/campaign-reel";
 import { PackageList } from "@/components/marketplace/package-list";
+import { useCategories } from "@/lib/category-store";
 import { formatEtb, formatFollowers } from "@/lib/format";
 import { nicheLabel, t } from "@/lib/i18n";
 import { useLocale } from "@/lib/locale-store";
@@ -28,6 +30,7 @@ export function CreatorCard({ creator }: { creator: Creator }) {
   const from = startingPackagePrice(creator);
   const page = primarySocial(creator);
   const locale = useLocale();
+  const categories = useCategories();
   const [photoReady, setPhotoReady] = useState(false);
 
   return (
@@ -50,7 +53,7 @@ export function CreatorCard({ creator }: { creator: Creator }) {
         <div className="absolute inset-0 bg-linear-to-t from-foreground/80 via-foreground/10 to-transparent" />
         <p className="absolute top-3 left-3 rounded-full bg-background/90 px-2.5 py-0.5 text-xs font-medium">
           {creator.rank ? `#${String(creator.rank).padStart(2, "0")} · ` : ""}
-          {nicheLabel(locale, creator.niche)}
+          {nicheLabel(locale, creator.niche, categories)}
         </p>
         {isPlaceholderPage(creator) ? (
           <p className="absolute top-3 right-3 rounded-full bg-foreground/80 px-2.5 py-0.5 text-xs text-background">
@@ -107,6 +110,9 @@ export function CreatorCard({ creator }: { creator: Creator }) {
         ) : (
           <PackageList packages={creator.packages} variant="compact" />
         )}
+        {creator.campaigns.length > 0 ? (
+          <CampaignTeaser campaigns={creator.campaigns} demo={isPlaceholderPage(creator)} />
+        ) : null}
         <div className="mt-auto flex flex-col gap-2">
           {isPageClaimable(creator) ? <ClaimPageButton creatorId={creator.id} /> : null}
           <Link

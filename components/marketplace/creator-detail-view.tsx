@@ -5,13 +5,17 @@ import Link from "next/link";
 import { BadgeCheck } from "lucide-react";
 
 import { PLATFORM_LABELS, SocialGlyph } from "@/components/marketing/social-icons";
+import { CampaignReel } from "@/components/marketplace/campaign-reel";
 import { ClaimPageButton } from "@/components/marketplace/claim-page-button";
 import { PackageList } from "@/components/marketplace/package-list";
 import { PageLoader } from "@/components/brand/page-loader";
 import { Reveal } from "@/components/motion/reveal";
 import { Button } from "@/components/ui/button";
+import { useCategories } from "@/lib/category-store";
 import { useCreator } from "@/lib/claim-store";
 import { formatEtb, formatFollowers } from "@/lib/format";
+import { nicheLabel } from "@/lib/i18n";
+import { useLocale } from "@/lib/locale-store";
 import { getCreator } from "@/lib/mocks/creators";
 import {
   FAVIKON_ET_TIKTOK_2026,
@@ -22,6 +26,8 @@ import {
 } from "@/packages/contracts";
 
 export function CreatorDetailView({ id }: { id: string }) {
+  const locale = useLocale();
+  const categories = useCategories();
   const live = useCreator(id);
   const creator = live ?? getCreator(id);
 
@@ -62,7 +68,7 @@ export function CreatorDetailView({ id }: { id: string }) {
             </div>
             <p className="rounded-full bg-primary px-3 py-1 text-sm font-medium text-primary-foreground">
               {creator.rank ? `#${creator.rank} · ` : ""}
-              {creator.niche}
+              {nicheLabel(locale, creator.niche, categories)}
             </p>
           </div>
         </div>
@@ -121,6 +127,7 @@ export function CreatorDetailView({ id }: { id: string }) {
             Open {PLATFORM_LABELS[page.platform]} page
           </Button>
         ) : null}
+        <CampaignReel campaigns={creator.campaigns} demo={isPlaceholderPage(creator)} />
       </section>
       </Reveal>
 

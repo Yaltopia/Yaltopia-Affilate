@@ -111,6 +111,13 @@ export default defineSchema({
     updatedBy: v.optional(v.id("profiles")),
   }).index("by_key", ["key"]),
 
+  categories: defineTable({
+    slug: v.string(),
+    name: v.string(),
+    nameAm: v.string(),
+    active: v.boolean(),
+  }).index("by_slug", ["slug"]),
+
   advertisers: defineTable({
     ownerProfileId: v.id("profiles"),
     name: v.string(),
@@ -176,6 +183,19 @@ export default defineSchema({
     platform: socialPlatform,
     deliverable: v.string(),
     price: money,
+  }).index("by_creator", ["creatorId"]),
+
+  creator_campaigns: defineTable({
+    creatorId: v.id("creators"),
+    brand: v.string(),
+    title: v.string(),
+    platform: socialPlatform,
+    charged: money,
+    views: v.number(),
+    likes: v.number(),
+    comments: v.number(),
+    videoUrl: v.string(),
+    postedOn: v.string(),
   }).index("by_creator", ["creatorId"]),
 
   kyc_submissions: defineTable({

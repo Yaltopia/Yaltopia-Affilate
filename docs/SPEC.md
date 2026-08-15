@@ -10,9 +10,9 @@ Shoppers stay anonymous.
 
 | Path | Audience | This pass |
 | --- | --- | --- |
-| `/` | Public | Marketing landing |
+| `/` | Public | Marketing landing. Creators / Orders switch on the directory. |
 | `/c/{id}` | Public | Creator page. Favikon placeholders are unclaimed until the creator claims the handle. |
-| `/posts` | Public | Live advertiser posts |
+| `/orders` | Public | Live advertiser orders (brands looking to sponsor). `/posts` redirects here. |
 | `/login` | Public | Same email/password for every role. Account roles pick the workspace. |
 | `/join/advertiser`, `/join/creator` | Public | Register + profile (creator packages). Signs in. No KYC here. Admin is not a join path. |
 | `/app/…` | Advertiser after login | Overview, Profile, KYC, Posts, Creators, Briefs, Wallet, Inbox, Analytics |
@@ -94,16 +94,21 @@ TikTok, Instagram, YouTube, Telegram, and Facebook each need a handle and profil
 
 ### Creator
 
-- Display name, city, niche, bio
+- Display name, city, category (`niche` stores the category name from the admin catalog), bio
 - All five social links
 - **Packages** — associated with the creator (`creators/{id}/packages`). At least one sellable package (`title`, `platform`, `deliverable`, `price` Money). Shown on cards and `/c/{id}` after the page is claimed.
+- **Past campaigns** — public portfolio on the creator (`creators/{id}/campaigns` / `creator_campaigns`). Each row is `brand`, `title`, `platform`, `charged` Money, `views` / `likes` / `comments`, `video_url`, `posted_on`. Cards show a teaser (video + charge + engagement). `/c/{id}` has a campaign picker, the video, and the same stats. Favikon placeholders use a **demo portfolio** (fictional brands, sample videos) until the creator claims and confirms the work. Demo charges are not real paid deals.
 - **Claim** — Listed pages start `unclaimed`. A creator claims at `/join/creator?claim={id}` or `/studio/claim` → `claim_pending`. Admin confirms (`claimed`) or rejects (back to `unclaimed`). Admin can also **add a person** and assign a page from `/admin/pages` without waiting for a public claim. Nobody else can sell that handle.
 
 ### Advertiser (seller)
 
 - Business name, city, website, bio
 - All five social links
-- **Posts** — advertiser publishes a marketplace post (`AdvertiserPost` / `campaign_criteria`): title, description, platforms, niches, `min_followers`, views/likes/comments KPIs, budget Money. Compose at `/app/posts`. Public board: `/posts`.
+- **Orders** — advertiser publishes a marketplace order (`AdvertiserPost` / `campaign_criteria`): title, description, platforms, niches (from the admin category catalog), `min_followers`, views/likes/comments KPIs, budget Money. Compose at `/app/posts`. Public board: `/orders` and the landing **Orders** switch. Framed as advertisers looking to sponsor. `/posts` redirects to `/orders`.
+
+## Categories
+
+Admin owns the marketplace category list (`categories` / `MarketplaceCategory`: `slug`, `name`, `name_am`, `active`). Public-read. Admin write only at `/admin/categories`. Seed includes the Favikon niches plus Fashion, Beauty, Tech, and TV. Creators and advertiser posts pick from this list. The public filter shows active categories, including ones Admin just added. `Creator.niche` stores `name`.
 
 Completeness helpers live in `packages/contracts` (`isCreatorProfileComplete`, `isAdvertiserProfileComplete`, `hasAllSocialLinks`).
 
@@ -164,13 +169,14 @@ Audit money, auth, and approval mutations. Never log secrets or raw payout numbe
 
 ## Marketing landing (`/`)
 
-Dark forest hero, then cream creator directory. No section in between.
+Dark forest hero, then cream directory. A **Creators / Orders** switch toggles the grid. Orders are not stacked above creators.
 
-1. Nav: Affiliate lockup, Creators, Posts, Creators join, Log in, **EN / አማ** locale toggle. No Dashboard. No Yaltopia Tech link — this is the customer site.
+1. Nav: Affiliate lockup, Creators, Orders, Creators join, Log in, **EN / አማ** locale toggle. No Dashboard. No Yaltopia Tech link — this is the customer site.
 2. Hero: “Find creators to collaborate with.” Mint search pill in the headline. **@handle search** under the headline (dark field + mint button). Side card: See how it works → `#creators`.
-3. Filters: **category** and **platform** are multi-select dropdowns. Follower and package-price ranges stay sliders.
-4. Creators grid: photo-forward cards (name + from-price on the image), socials, package board, link to `/c/{id}`. Detail: photo + bio, sticky packages panel. Request goes to advertiser register (`/join/advertiser`), not KYC and not book-a-call.
-5. Footer: Prime Store credit. A quiet **Powered by Yaltopia Tech** line sits below. Spec, GitHub, and book-a-call stay on the README.
+3. Directory switch: **Creators** (default) or **Orders** (`#orders`). Same filter panel. Order cards are advertiser requests (budget Money, platforms, niches, KPI mins, Apply as creator). Full board also at `/orders`.
+4. Filters: **category** and **platform** are multi-select dropdowns that stay open while toggling. Category options come from the admin catalog. Follower and package-price ranges stay sliders.
+5. Creators grid: photo-forward cards (name + from-price on the image), socials, package board, past-campaign teaser (video, charged Money, views/likes/comments), link to `/c/{id}`. Detail: photo + bio, campaign picker + player + stats, sticky packages panel. Request goes to advertiser register (`/join/advertiser`), not KYC and not book-a-call.
+6. Footer: Prime Store credit. A quiet **Powered by Yaltopia Tech** line sits below. Spec, GitHub, and book-a-call stay on the README.
 
 Search strips `@`, matches `creator_socials.handle`, scrolls to `#creators`. Default list is 1,000+ followers. Empty: one sentence on the grid.
 
@@ -178,7 +184,7 @@ Search strips `@`, matches `creator_socials.handle`, scrolls to `#creators`. Def
 
 **Motion:** Customer surfaces use a short rise/fade on first paint and IntersectionObserver reveals on scroll (hero stagger, filters, cards, footer). Hover lifts cards and the “See how it works” tile. No scroll hijack, marquees, or looping decoration. `prefers-reduced-motion: reduce` turns motion off.
 
-Directory seed is the [Favikon Top 20 TikTokers in Ethiopia, May 2026](https://www.favikon.com/blog/top-tiktokers-ethiopia): rank, name, bio, TikTok score, and platforms named on that page. These are **placeholder pages**. Suggested handles are claimable by the creators (`claim_status`: `unclaimed` → `claim_pending` → `claimed`). Admin can add a person and assign a page from `/admin/pages`. Follower counts are only stored when Favikon stated them (SolozTactic 200k TikTok, Eshetu Melese 3M+ YouTube). Photos are stand-ins. Shapes match `packages/contracts`.
+Directory seed is the [Favikon Top 20 TikTokers in Ethiopia, May 2026](https://www.favikon.com/blog/top-tiktokers-ethiopia): rank, name, bio, TikTok score, and platforms named on that page. These are **placeholder pages**. Suggested handles are claimable by the creators (`claim_status`: `unclaimed` → `claim_pending` → `claimed`). Admin can add a person and assign a page from `/admin/pages`. Follower counts are only stored when Favikon stated them (SolozTactic 200k TikTok, Eshetu Melese 3M+ YouTube). Photos are stand-ins. Past-campaign rows on placeholders are a demo portfolio for trust — fictional brands and sample videos, not claimed paid work. Shapes match `packages/contracts`.
 
 ## Customer and Admin nav
 
@@ -186,7 +192,7 @@ Driven by `NAV_REGISTRY`. Filter with `navForSession`.
 
 Advertiser (`/app`): Overview, Profile, KYC, Posts, Creators, Briefs, Wallet, Inbox, Analytics.  
 Creator (`/studio`): Briefs, Profile, KYC, Codes & links, Earnings, Claim page.  
-Admin (`/admin`): Overview, Pages & people, Creator queue, Advertisers, KYC review, Signup criteria, Users, Balances, Payment requests, Audit.  
+Admin (`/admin`): Overview, Pages & people, Creator queue, Advertisers, KYC review, Categories, Signup criteria, Users, Balances, Payment requests, Audit.  
 Payout Agent (`/admin`): Overview, Balances, Payment requests.
 
 ## Redirect and conversion (later)

@@ -1,4 +1,4 @@
-import type { Creator, CreatorPackage, SocialAccount, SocialPlatform } from "@/packages/contracts";
+import type { Creator, CreatorCampaign, CreatorPackage, SocialAccount, SocialPlatform } from "@/packages/contracts";
 import {
   DEFAULT_MIN_FOLLOWERS,
   FAVIKON_ET_TIKTOK_2026,
@@ -45,6 +45,7 @@ export function emptyCreator(): Creator {
         price: { amount: "", currency: "ETB" },
       },
     ],
+    campaigns: [],
     briefFee: { amount: "0.00", currency: "ETB" },
     maxFollowersDeclared: 0,
     minFollowersRequired: DEFAULT_MIN_FOLLOWERS.amount,
@@ -78,8 +79,52 @@ function listedSocials(
   });
 }
 
-function placeholderPackages(id: string): CreatorPackage[] {
+function placeholderPackages(_id: string): CreatorPackage[] {
   return [];
+}
+
+const SAMPLE_VIDEOS = [
+  "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+  "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+  "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+  "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+  "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+];
+
+const CAMPAIGN_BRANDS: Record<string, [string, string]> = {
+  Motivation: ["Rise Addis", "Selam Fit"],
+  Lifestyle: ["Merkato Home", "Yene Glow"],
+  Comedy: ["Rift Cola", "Taxi Talk"],
+  Music: ["Addis Beats", "Krar Club"],
+  Film: ["Abyssinia Reels", "Blue Nile Cut"],
+  Wildlife: ["Simien Watch", "Rift Trails"],
+  Food: ["Injera House", "Buna Daily"],
+  Faith: ["Selam Light", "Meskel Hour"],
+  Fitness: ["Addis Lift", "Highland Run"],
+  Culture: ["Habesha Threads", "Timket Live"],
+  Sports: ["Pitch Addis", "St. George Kit"],
+  Fashion: ["Kazanchis Wear", "Shewa Line"],
+  Beauty: ["Yene Glow", "Sheba Skin"],
+  Tech: ["Telebirr Demo", "Safaricom Spot"],
+  TV: ["EBC Night", "Kana Clip"],
+};
+
+function placeholderCampaigns(row: FavikonRow, index: number): CreatorCampaign[] {
+  const brands = CAMPAIGN_BRANDS[row.niche] ?? ["Rift Cola", "Habesha Threads"];
+  const platform = row.socials[0]?.platform ?? "tiktok";
+  const base = 6500 + (21 - row.rank) * 1100;
+  return brands.map((brand, slot) => ({
+    id: `${row.id}-camp-${slot + 1}`,
+    brand,
+    title: `${brand} ${row.niche.toLowerCase()} film`,
+    platform,
+    charged: { amount: `${base + slot * 2800}.00`, currency: "ETB" },
+    views: 80_000 + (21 - row.rank) * 14_000 + slot * 36_000,
+    likes: 9_500 + (21 - row.rank) * 900 + slot * 3_200,
+    comments: 280 + (21 - row.rank) * 18 + slot * 90,
+    videoUrl: SAMPLE_VIDEOS[(index + slot) % SAMPLE_VIDEOS.length],
+    postedOn: slot === 0 ? "2026-05-12" : "2026-03-04",
+  }));
 }
 
 type FavikonRow = {
@@ -340,6 +385,7 @@ export const mockCreators: Creator[] = FAVIKON_ROWS.map((row, index) => {
     photoUrl: PHOTOS[index % PHOTOS.length],
     socials: listedSocials(row.socials),
     packages: placeholderPackages(row.id),
+    campaigns: placeholderCampaigns(row, index),
     briefFee: { amount: "0.00", currency: "ETB" },
     maxFollowersDeclared: followers,
     minFollowersRequired: DEFAULT_MIN_FOLLOWERS.amount,

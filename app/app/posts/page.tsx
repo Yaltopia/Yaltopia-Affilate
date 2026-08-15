@@ -6,7 +6,7 @@ export default function AdvertiserPostsPage() {
       <div>
         <h1 className="font-heading text-3xl font-bold tracking-tight">Posts</h1>
         <p className="text-sm text-muted-foreground">
-          Publish what you want to advertise. Live posts show on the public board.
+          Publish an order. Live orders show on `/` and `/orders` as advertisers looking to sponsor.
         </p>
       </div>
       <AdvertiserPostForm />

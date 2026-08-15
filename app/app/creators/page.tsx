@@ -47,6 +47,12 @@ export default function CreatorsPage() {
                 <Badge variant="secondary">{creator.niche}</Badge>
               </div>
               <PackageList packages={creator.packages} variant="compact" />
+              {creator.campaigns[0] ? (
+                <p className="text-xs text-muted-foreground">
+                  {creator.campaigns[0].brand} · {formatEtb(creator.campaigns[0].charged)} ·{" "}
+                  {formatFollowers(creator.campaigns[0].views)} views
+                </p>
+              ) : null}
               <div className="mt-auto flex items-center justify-between gap-2">
                 <p className="font-mono text-xs font-medium">
                   From {formatEtb(startingPackagePrice(creator))}

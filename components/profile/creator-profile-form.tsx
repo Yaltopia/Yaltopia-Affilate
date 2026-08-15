@@ -3,6 +3,7 @@
 import { FormEvent, useMemo, useState } from "react";
 import Link from "next/link";
 
+import { CategorySelect } from "@/components/marketplace/category-select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -83,14 +84,13 @@ export function CreatorProfileForm({
             onChange={(event) => setProfile({ ...profile, city: event.target.value })}
           />
         </div>
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="cr-niche">Niche</Label>
-          <Input
-            id="cr-niche"
-            value={profile.niche}
-            onChange={(event) => setProfile({ ...profile, niche: event.target.value })}
-          />
-        </div>
+        <CategorySelect
+          id="cr-niche"
+          label="Category"
+          value={profile.niche}
+          onChange={(niche) => setProfile({ ...profile, niche })}
+          required
+        />
         <div className="flex flex-col gap-1 sm:col-span-2">
           <Label htmlFor="cr-bio">Bio</Label>
           <Textarea

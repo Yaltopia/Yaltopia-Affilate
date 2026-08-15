@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAdminState } from "@/lib/admin-store";
+import { useCategories } from "@/lib/category-store";
 import { useCreators } from "@/lib/claim-store";
 import { useSession } from "@/lib/session-store";
 import { formatEtb } from "@/lib/format";
@@ -13,6 +14,7 @@ export default function AdminOverviewPage() {
   const session = useSession();
   const { creators, advertisers, kyc, balances } = useAdminState();
   const pages = useCreators();
+  const categories = useCategories();
   const pendingClaims = pages.filter((page) => page.claimStatus === "claim_pending").length;
   const reserved = balances.reduce((sum, row) => sum + Number(row.reserved.amount), 0);
   const isAdmin = session ? hasRole(session, "admin") : false;
@@ -46,6 +48,7 @@ export default function AdminOverviewPage() {
               value={String(kyc.filter((row) => row.status === "submitted").length)}
             />
             <Stat href="/admin/pages" label="Page claims" value={String(pendingClaims)} />
+            <Stat href="/admin/categories" label="Categories" value={String(categories.length)} />
           </>
         ) : null}
         {session && hasCapability(session, "payout.view_balances") ? (

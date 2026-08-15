@@ -32,7 +32,7 @@ export function SiteHeader({
         <Link href="/#creators" className={tone === "dark" ? "text-background underline decoration-primary decoration-2 underline-offset-8" : undefined}>
           {t(locale, "creators")}
         </Link>
-        <Link href="/posts">{t(locale, "posts")}</Link>
+        <Link href="/#orders">{t(locale, "orders")}</Link>
         <Link href="/join/creator">{t(locale, "creatorsJoin")}</Link>
         <Link href="/login">{t(locale, "logIn")}</Link>
       </nav>

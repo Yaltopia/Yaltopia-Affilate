@@ -31,6 +31,21 @@ export const mockPosts: AdvertiserPost[] = [
     budget: { amount: "40000.00", currency: "ETB" },
     status: "live",
   },
+  {
+    id: "post-3",
+    advertiserId: "adv-rift",
+    advertiserName: "Rift Cola",
+    title: "Comedy skit — looking to sponsor",
+    description: "30s TikTok. Product in the punchline. Amharic first. Code on screen at the end.",
+    platforms: ["tiktok"],
+    niches: ["Comedy"],
+    minFollowers: 15000,
+    minViews: 20000,
+    minLikes: 900,
+    minComments: 80,
+    budget: { amount: "18000.00", currency: "ETB" },
+    status: "live",
+  },
 ];
 
 /** @deprecated use mockPosts */

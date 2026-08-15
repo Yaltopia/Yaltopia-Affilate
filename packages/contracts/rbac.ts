@@ -53,6 +53,7 @@ export const NAV_REGISTRY: readonly NavItem[] = [
   { id: "adm.creators", href: "/admin/creators", label: "Creator queue", portal: "admin", anyOf: ADMIN_ONLY },
   { id: "adm.advertisers", href: "/admin/advertisers", label: "Advertisers", portal: "admin", anyOf: ADMIN_ONLY },
   { id: "adm.kyc", href: "/admin/kyc", label: "KYC review", portal: "admin", anyOf: ADMIN_ONLY },
+  { id: "adm.categories", href: "/admin/categories", label: "Categories", portal: "admin", anyOf: ADMIN_ONLY },
   { id: "adm.settings", href: "/admin/settings", label: "Signup criteria", portal: "admin", anyOf: ADMIN_ONLY },
   { id: "adm.users", href: "/admin/users", label: "Users", portal: "admin", anyOf: ADMIN_ONLY },
   { id: "adm.balances", href: "/admin/balances", label: "Balances", portal: "admin", anyOf: OPS },

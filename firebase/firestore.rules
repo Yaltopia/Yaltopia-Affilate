@@ -32,6 +32,11 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    match /categories/{id} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
     match /profiles/{uid} {
       allow read: if signedIn();
       allow create, update: if isOwner(uid);
@@ -100,6 +105,12 @@ service cloud.firestore {
       }
 
       match /packages/{pid} {
+        allow read: if true;
+        allow write: if isAdmin()
+          || (signedIn() && get(/databases/$(database)/documents/creators/$(id)).data.profile_id == request.auth.uid);
+      }
+
+      match /campaigns/{cid} {
         allow read: if true;
         allow write: if isAdmin()
           || (signedIn() && get(/databases/$(database)/documents/creators/$(id)).data.profile_id == request.auth.uid);

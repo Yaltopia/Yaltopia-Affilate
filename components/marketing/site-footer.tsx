@@ -31,8 +31,8 @@ export function SiteFooter({ compact = false }: { compact?: boolean }) {
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <nav className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-            <Link href="/posts" className="hover:text-foreground">
-              {t(locale, "posts")}
+            <Link href="/orders" className="hover:text-foreground">
+              {t(locale, "orders")}
             </Link>
             <Link href="/join/advertiser" className="hover:text-foreground">
               {t(locale, "advertisers")}

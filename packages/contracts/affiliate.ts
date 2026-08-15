@@ -94,6 +94,20 @@ export type CreatorPackage = {
   price: Money;
 };
 
+/** Public past work. Charge is Money. Engagement is views / likes / comments. */
+export type CreatorCampaign = {
+  id: string;
+  brand: string;
+  title: string;
+  platform: SocialPlatform;
+  charged: Money;
+  views: number;
+  likes: number;
+  comments: number;
+  videoUrl: string;
+  postedOn: string;
+};
+
 export type PageClaimStatus = "unclaimed" | "claim_pending" | "claimed";
 
 export const FAVIKON_ET_TIKTOK_2026 = {
@@ -101,6 +115,53 @@ export const FAVIKON_ET_TIKTOK_2026 = {
   sourceUrl: "https://www.favikon.com/blog/top-tiktokers-ethiopia",
   sourceLabel: "Favikon Top 20 TikTokers in Ethiopia, May 2026",
 } as const;
+
+/** Admin-owned marketplace category. `name` is stored on `Creator.niche`. */
+export type MarketplaceCategory = {
+  id: string;
+  slug: string;
+  name: string;
+  nameAm: string;
+  active: boolean;
+};
+
+export const DEFAULT_CATEGORIES: MarketplaceCategory[] = [
+  { id: "cat-motivation", slug: "motivation", name: "Motivation", nameAm: "ተነሳሽነት", active: true },
+  { id: "cat-lifestyle", slug: "lifestyle", name: "Lifestyle", nameAm: "የኑሮ ዘይቤ", active: true },
+  { id: "cat-comedy", slug: "comedy", name: "Comedy", nameAm: "ኮሜዲ", active: true },
+  { id: "cat-music", slug: "music", name: "Music", nameAm: "ሙዚቃ", active: true },
+  { id: "cat-film", slug: "film", name: "Film", nameAm: "ፊልም", active: true },
+  { id: "cat-wildlife", slug: "wildlife", name: "Wildlife", nameAm: "የዱር እንስሳት", active: true },
+  { id: "cat-food", slug: "food", name: "Food", nameAm: "ምግብ", active: true },
+  { id: "cat-faith", slug: "faith", name: "Faith", nameAm: "እምነት", active: true },
+  { id: "cat-fitness", slug: "fitness", name: "Fitness", nameAm: "የአካል ብቃት", active: true },
+  { id: "cat-culture", slug: "culture", name: "Culture", nameAm: "ባህል", active: true },
+  { id: "cat-sports", slug: "sports", name: "Sports", nameAm: "ስፖርት", active: true },
+  { id: "cat-fashion", slug: "fashion", name: "Fashion", nameAm: "ፋሽን", active: true },
+  { id: "cat-beauty", slug: "beauty", name: "Beauty", nameAm: "ውበት", active: true },
+  { id: "cat-tech", slug: "tech", name: "Tech", nameAm: "ቴክኖሎጂ", active: true },
+  { id: "cat-tv", slug: "tv", name: "TV", nameAm: "ቴሌቪዥን", active: true },
+];
+
+export function categorySlug(name: string): string {
+  return name
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+export function findCategory(
+  categories: MarketplaceCategory[],
+  name: string,
+): MarketplaceCategory | undefined {
+  const slug = categorySlug(name);
+  return categories.find((category) => category.slug === slug || category.name === name);
+}
+
+export function activeCategoryNames(categories: MarketplaceCategory[]): string[] {
+  return categories.filter((category) => category.active).map((category) => category.name);
+}
 
 export type Creator = {
   id: string;
@@ -113,6 +174,7 @@ export type Creator = {
   photoUrl: string;
   socials: SocialAccount[];
   packages: CreatorPackage[];
+  campaigns: CreatorCampaign[];
   briefFee: Money;
   maxFollowersDeclared: number;
   minFollowersRequired: number;
