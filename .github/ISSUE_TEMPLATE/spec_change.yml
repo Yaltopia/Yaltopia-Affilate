@@ -1,0 +1,34 @@
+name: Spec change
+description: Required for enum, role, Money, RBAC, or provider mapping changes.
+title: "[spec] "
+labels: ["spec"]
+body:
+  - type: markdown
+    attributes:
+      value: The living-spec rule applies. The PR must update SPEC + Firebase + Supabase + TypeScript contracts together.
+  - type: textarea
+    id: contract
+    attributes:
+      label: What contract changes
+      description: Statuses, roles, Money fields, events, or authorization.
+    validations:
+      required: true
+  - type: checkboxes
+    id: surfaces
+    attributes:
+      label: Mappings to update
+      options:
+        - label: docs/SPEC.md
+        - label: firebase/ rules or indexes
+        - label: supabase/migrations
+        - label: packages/contracts
+        - label: CHANGELOG.md
+    validations:
+      required: true
+  - type: textarea
+    id: migration
+    attributes:
+      label: Compatibility
+      description: Does this break existing rows/documents? How do approved creators stay valid?
+    validations:
+      required: true

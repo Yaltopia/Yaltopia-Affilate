@@ -1,0 +1,168 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function roles() {
+      return signedIn() && request.auth.token.roles is list
+        ? request.auth.token.roles
+        : [];
+    }
+
+    function hasRole(role) {
+      return role in roles();
+    }
+
+    function isAdmin() {
+      return hasRole("admin");
+    }
+
+    function isPayoutAgent() {
+      return hasRole("payout_agent") || isAdmin();
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    match /platform_settings/{key} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    match /profiles/{uid} {
+      allow read: if signedIn();
+      allow create, update: if isOwner(uid);
+      allow delete: if isAdmin();
+    }
+
+    match /profile_roles/{id} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    match /advertisers/{id} {
+      allow read: if isAdmin() || isPayoutAgent()
+        || (signedIn() && resource.data.owner_profile_id == request.auth.uid);
+      allow create: if signedIn() && hasRole("advertiser");
+      allow update: if isAdmin()
+        || (signedIn() && resource.data.owner_profile_id == request.auth.uid
+            && !request.resource.data.diff(resource.data).affectedKeys().hasAny(["status"]));
+      allow delete: if isAdmin();
+
+      match /members/{uid} {
+        allow read: if isAdmin() || isOwner(uid);
+        allow write: if isAdmin();
+      }
+    }
+
+    match /creators/{id} {
+      allow read: if resource.data.status == "approved" || isAdmin()
+        || (signedIn() && resource.data.profile_id == request.auth.uid);
+      allow create: if signedIn() && request.resource.data.profile_id == request.auth.uid;
+      allow update: if isAdmin()
+        || (signedIn() && resource.data.profile_id == request.auth.uid
+            && !request.resource.data.diff(resource.data).affectedKeys()
+              .hasAny(["status", "verified_at", "reviewed_by"]));
+      allow delete: if isAdmin();
+
+      match /socials/{sid} {
+        allow read: if signedIn();
+        allow write: if isAdmin()
+          || (signedIn() && get(/databases/$(database)/documents/creators/$(id)).data.profile_id == request.auth.uid);
+      }
+    }
+
+    match /offers/{id} {
+      allow read: if resource.data.status == "live" || isAdmin()
+        || (signedIn() && hasRole("advertiser"));
+      allow create, update: if isAdmin() || hasRole("advertiser");
+      allow delete: if isAdmin();
+    }
+
+    match /offer_applications/{id} {
+      allow read: if isAdmin() || signedIn();
+      allow create: if signedIn() && hasRole("creator");
+      allow update: if isAdmin() || hasRole("advertiser");
+    }
+
+    match /collaboration_requests/{id} {
+      allow read: if isAdmin()
+        || (signedIn() && (
+          resource.data.creator_id == request.auth.uid
+          || resource.data.advertiser_owner_id == request.auth.uid
+        ));
+      allow create: if hasRole("advertiser");
+      allow update: if isAdmin()
+        || (signedIn() && (
+          resource.data.creator_id == request.auth.uid
+          || resource.data.advertiser_owner_id == request.auth.uid
+        ));
+
+      match /terms/{tid} {
+        allow read, create: if signedIn();
+        allow update, delete: if isAdmin();
+      }
+    }
+
+    match /tracking_links/{code} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    match /promo_codes/{code} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    match /clicks/{id} {
+      allow read: if isAdmin() || isPayoutAgent();
+      allow write: if false;
+    }
+
+    match /earnings/{id} {
+      allow read: if isAdmin() || isPayoutAgent()
+        || (signedIn() && resource.data.creator_id == request.auth.uid);
+      allow write: if isAdmin();
+    }
+
+    match /conversions/{id} {
+      allow read: if isAdmin() || isPayoutAgent()
+        || (signedIn() && (
+          resource.data.creator_id == request.auth.uid
+          || resource.data.advertiser_id == request.auth.uid
+        ));
+      allow create, update: if isAdmin() || hasRole("advertiser");
+    }
+
+    match /payment_requests/{id} {
+      allow read: if isAdmin() || isPayoutAgent()
+        || (signedIn() && hasRole("advertiser"));
+      allow create, update: if isPayoutAgent();
+      allow delete: if isAdmin();
+
+      match /items/{iid} {
+        allow read: if isAdmin() || isPayoutAgent();
+        allow write: if isPayoutAgent();
+      }
+    }
+
+    match /creator_payouts/{id} {
+      allow read: if isAdmin()
+        || (signedIn() && resource.data.creator_id == request.auth.uid);
+      allow write: if isAdmin();
+    }
+
+    match /audit_logs/{id} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
+    match /domain_events/{id} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+  }
+}
