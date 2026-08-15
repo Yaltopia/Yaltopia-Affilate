@@ -15,7 +15,7 @@ Shoppers stay anonymous.
 | `/orders` | Public | Live advertiser orders (brands looking to sponsor). `/posts` redirects here. |
 | `/terms` | Public | Terms of Service |
 | `/privacy` | Public | Privacy Policy |
-| `/login` | Public | Social login only (Google + five platforms). Gishen-style demo account picker. Split forest/cream layout. Account roles pick the workspace. |
+| `/login` | Public | Social login only (Google + five platforms). Role-grouped demo account picker. Split forest/cream layout. Account roles pick the workspace. |
 | `/join/advertiser`, `/join/creator` | Public | Social login, then grant social-media access. Signs in. No email/password. No packages on join. Admin is not a join path. |
 | `/app/…` | Advertiser after login | Sidebar workspace: Overview, Profile, KYC, Posts, Creators, Briefs, Wallet, Inbox, Analytics |
 | `/studio/…` | Creator after login | Sidebar workspace: Overview, Briefs, Packages, Profile, KYC, Codes & links, Earnings |
